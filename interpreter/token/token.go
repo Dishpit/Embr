@@ -8,6 +8,10 @@ type TokenType string
 type Token struct {
 	Type TokenType
 	Literal string
+	/* TODO: consider attaching filenames/line numbers/etc.
+	this will make it easier to debug production code.
+	note that it adds a lot of complexity,
+	but will be needed prior to a 1.0 launch */
 }
 
 const (

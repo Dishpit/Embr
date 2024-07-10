@@ -33,6 +33,10 @@ const (
 	LT				= "<"
 	GT				= ">"
 
+	// boolean logic
+	EQ			= "=="
+	NOT_EQ	= "!="
+
 	// delimiters
 	COMMA			= ","
 	SEMICOLON	= ";"

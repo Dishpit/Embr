@@ -62,7 +62,7 @@ int result = add_two(five, ten);
 		{token.FSLASH, "/"},
 		{token.ASTERISK, "*"},
 		{token.INT, "5"},
-		{token.SEMICOLON, ";"}
+		{token.SEMICOLON, ";"},
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},

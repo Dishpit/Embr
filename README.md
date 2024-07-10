@@ -22,3 +22,14 @@ Omega is designed to be a general-purpose programming language. Sure, it'd be gr
 - a string data structure
 - an array data structure
 - a hash data structure
+
+## Proposed Syntax
+```omega
+// variable declarations
+int my_integer = 42069;
+str my_string = "Hello, Omega!";
+flt my_float = 3.14;
+bln my_boolean = true;
+arr my_array = [1, 2, 3, 4]
+hsh my_hash = {"name": "Omega", "power_level": 9001}
+```

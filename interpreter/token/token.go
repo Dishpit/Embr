@@ -46,6 +46,7 @@ var keywords = map[string]TokenType{
 	"fn": FUNCTION,
 	"@int": RETTYPE_INT,
 	"int": VARTYPE_INT,
+	"return": RETURN,
 }
 
 func LookupIdent(ident string) TokenType {

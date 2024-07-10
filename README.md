@@ -43,6 +43,18 @@ fn add_two(x, y) @int {
 };
 ```
 
+### Full Sample Script
+```omega
+int weed_number = 420;
+int sex_number = 69;
+
+fn add_ints(x, y) @int {
+  return x + y;
+};
+
+int based_number = add_ints(weed_number, sex_number);
+```
+
 ## Contributing
 I'm thrilled that you're interested in contributing to Omega! Please adopt the following branch and development guidelines to ensure a smooth and collaborative contribution environment.
 

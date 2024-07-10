@@ -8,7 +8,7 @@ import (
 func TestNextToken(t *testing.T) {
 	input := `int five = 5;
 int ten = 10;
-fn add_two(x, y) int {
+fn add_two(x, y) @int {
   return x + y;
 };
 
@@ -35,7 +35,7 @@ int result = add_two(five, ten);`
 		{token.COMMA, ","},
 		{token.IDENT, "y"},
 		{token.RPAREN, ")"},
-		{token.RETTYPE_INT, "int"},
+		{token.RETTYPE_INT, "@int"},
 		{token.LBRACE, "{"},
 		{token.RETURN, "return"},
 		{token.IDENT, "x"},

@@ -41,3 +41,16 @@ const (
 	VARTYPE_INT			= "VARTYPE_INT"
 	RETTYPE_INT			= "RETTYPE_INT"
 )
+
+var keywords = map[string]TokenType{
+	"fn": FUNCTION,
+	"@int": RETTYPE_INT,
+	"int": VARTYPE_INT,
+}
+
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
+}

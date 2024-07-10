@@ -36,9 +36,9 @@ hsh my_hash = {"name": "Omega", "power_level": 9001};
 ```
 
 ### Functions
-Functions in Omega follow the structure of: `fn <name>(<optional parameters>) <return type> {<function contents>}`. As with variable names, function names follow the snake_case standard for readability purposes.
+Functions in Omega follow the structure of: `fn <name>(<parameters>) @<return type> {<function contents>}`. As with variable names, function names follow the snake_case standard for readability purposes. Note that return types are denoted by the @ symbol.
 ```omega
-fn add_two(x, y) int {
+fn add_two(x, y) @int {
   return x + y;
 };
 ```

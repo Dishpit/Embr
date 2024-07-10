@@ -8,11 +8,11 @@ import (
 func TestNextToken(t *testing.T) {
 	input := `int five = 5;
 int ten = 10;
-fn addTwo(x, y) int {
+fn add_two(x, y) int {
   return x + y;
 };
 
-int result = addTwo(five, ten);`
+int result = add_two(five, ten);`
 
 	tests := []struct {
 		expectedType token.TokenType
@@ -29,7 +29,7 @@ int result = addTwo(five, ten);`
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
 		{token.FUNCTION, "fn"},
-		{token.IDENT, "addTwo"},
+		{token.IDENT, "add_two"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -47,7 +47,7 @@ int result = addTwo(five, ten);`
 		{token.VARTYPE_INT, "int"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
-		{token.IDENT, "addTwo"},
+		{token.IDENT, "add_two"},
 		{token.LPAREN, "("},
 		{token.IDENT, "five"},
 		{token.COMMA, ","},

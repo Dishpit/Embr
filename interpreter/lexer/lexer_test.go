@@ -12,7 +12,10 @@ fn add_two(x, y) @int {
   return x + y;
 };
 
-int result = add_two(five, ten);`
+int result = add_two(five, ten);
+!-/*5;
+5 < 10 > 5;
+`
 
 	tests := []struct {
 		expectedType token.TokenType
@@ -53,6 +56,18 @@ int result = add_two(five, ten);`
 		{token.COMMA, ","},
 		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.FSLASH, "/"},
+		{token.ASTERISK, "*"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"}
+		{token.INT, "5"},
+		{token.LT, "<"},
+		{token.INT, "10"},
+		{token.GT, ">"},
+		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

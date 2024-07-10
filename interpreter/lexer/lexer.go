@@ -94,6 +94,17 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
+/* peekChar is basically readChar except it doesn't increment l.position and l.readPosition.
+the reason is we only want to peek ahead and not move around in it so we know
+what a call to readChar would return */
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}	else {
+		return l.input[l.readPosition]
+	}
+}
+
 func newToken(tokenType token.TokenType, ch byte) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch)}
 }

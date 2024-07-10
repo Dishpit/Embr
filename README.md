@@ -12,6 +12,7 @@ Omega is designed to be a general-purpose programming language. Sure, it'd be gr
 
 ## Planned Features
 - C-like syntax
+- explicit typing
 - variable bindings
 - integers and booleans
 - arithmetic expressions

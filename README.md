@@ -23,15 +23,24 @@ Omega is designed to be a general-purpose programming language. Sure, it'd be gr
 - an array data structure
 - a hash data structure
 
-## Proposed Syntax
+## Syntax and Style Guide
+### Variables
+Variables in Omega follow the structure of: `<type> <name> = <contents>`. For readability purposes, the official Omega way of doing things requests that variables and other names utilize snake_casing. While you *can* use camelCase, it's not ideal.
 ```omega
-// variable declarations
 int my_integer = 42069;
 str my_string = "Hello, Omega!";
 flt my_float = 3.14;
 bln my_boolean = true;
-arr my_array = [1, 2, 3, 4]
-hsh my_hash = {"name": "Omega", "power_level": 9001}
+arr my_array = [1, 2, 3, 4];
+hsh my_hash = {"name": "Omega", "power_level": 9001};
+```
+
+### Functions
+Functions in Omega follow the structure of: `fn <name>(<optional parameters>) <return type> {<function contents>}`. As with variable names, function names follow the snake_case standard for readability purposes.
+```omega
+fn add_two(x, y) int {
+  return x + y;
+};
 ```
 
 ## Contributing

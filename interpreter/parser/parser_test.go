@@ -10,7 +10,7 @@ func TestVarTypeIntStatements(t *testing.T) {
 	input := `
 int x = 420;
 int y = 69;
-int foobar = 8675309
+int foobar = 8675309;
 `
 	l := lexer.New(input)
 	p := New(l)

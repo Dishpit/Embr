@@ -27,5 +27,6 @@ Currently, Omega supports one basic data type: integers.
 Declaring an integer variable with an initial value:
 
 ```omega
-int based_number = 42069;
+int weed_number = 420;
+int sex_number = 69;
 ```

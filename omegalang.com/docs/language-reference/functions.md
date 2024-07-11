@@ -27,7 +27,7 @@ fn my_func() @int {
 Here is a simple example of a function in Omega:
 
 ```omega
-fn add_nums(x, y) @int {
+fn add_ints(x, y) @int {
   return x + y;
 };
 ```

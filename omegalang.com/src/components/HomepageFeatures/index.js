@@ -4,32 +4,29 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Simple Syntax',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Omega&apos;s syntax is straightforward and easy to learn, using clear type annotations and intuitive return type markers, making programming accessible for beginners and efficient for experienced developers.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Future-Proof Design',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Omega is built with a future-proof design, ensuring that every specification iteration remains compatible with new releases. Unlike other languages such as Rust, Omega avoids breaking changes and forwards incompatibility, providing a stable and reliable coding experience over time.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Streamlined Learning Curve',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Omega offers a minimalist feature set, with explicit types and familiar programming concepts, designed to flatten the learning curve and enable quick mastery for new programmers.
       </>
     ),
   },

@@ -8,53 +8,6 @@ Omega is (obviously) in its extreme infancy stage; it hasn't even attached to th
 
 Omega is designed to be a general-purpose programming language. Sure, it'd be great if I can set it up so it can accept multiple programming paradigms (functional, OOP, etc) in order to ease adoption from developers of all flavors, but that's wildly ambitious at this stage.
 
-## Implemented Features
-
-## Planned Features
-- C-like syntax
-- explicit typing
-- variable bindings
-- integers and booleans
-- arithmetic expressions
-- built-in functions
-- first-class and higher-order functions
-- closures
-- a string data structure
-- an array data structure
-- a hash data structure
-
-## Syntax and Style Guide
-### Variables
-Variables in Omega follow the structure of: `<type> <name> = <contents>`. For readability purposes, the official Omega way of doing things requests that variables and other names utilize snake_casing. While you *can* use camelCase, it's not ideal.
-```omega
-int my_integer = 42069;
-str my_string = "Hello, Omega!";
-flt my_float = 3.14;
-bln my_boolean = true;
-arr my_array = [1, 2, 3, 4];
-hsh my_hash = {"name": "Omega", "power_level": 9001};
-```
-
-### Functions
-Functions in Omega follow the structure of: `fn <name>(<parameters>) @<return type> {<function contents>}`. As with variable names, function names follow the snake_case standard for readability purposes. Note that return types are denoted by the @ symbol.
-```omega
-fn add_two(x, y) @int {
-  return x + y;
-};
-```
-
-### Full Sample Script
-```omega
-int weed_number = 420;
-int sex_number = 69;
-
-fn add_ints(x, y) @int {
-  return x + y;
-};
-
-int based_number = add_ints(weed_number, sex_number);
-```
-
 ## Contributing
 I'm thrilled that you're interested in contributing to Omega! Please adopt the following branch and development guidelines to ensure a smooth and collaborative contribution environment.
 

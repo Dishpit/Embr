@@ -1,5 +1,17 @@
 package ast
 
+import "interpreter/token"
+
+// variable types
+type VarTypeInt struct {
+	Token token.Token	// the token.VARTYPE_INT token
+	Name *Identifier
+	Value Expression
+}
+func (vti *VarTypeInt) statementNode() {}
+func (vti *VarTypeInt) TokenLiteral() string { return ls.Token.Literal }
+
+// abstract syntax tree nodes
 type Node interface {
 	TokenLiteral() string
 }
@@ -17,6 +29,13 @@ type Expression interface {
 type Program struct {
 	Statements []Statement
 }
+
+type Identifier struct {
+	Token token.Token	// the token.IDENT token
+	Value string
+}
+func (i *Identifier) expressionNode() {}
+func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {

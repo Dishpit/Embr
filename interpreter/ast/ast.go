@@ -9,7 +9,7 @@ type VarTypeInt struct {
 	Value Expression
 }
 func (vti *VarTypeInt) statementNode() {}
-func (vti *VarTypeInt) TokenLiteral() string { return ls.Token.Literal }
+func (vti *VarTypeInt) TokenLiteral() string { return vti.Token.Literal }
 
 // abstract syntax tree nodes
 type Node interface {

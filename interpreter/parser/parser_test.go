@@ -17,7 +17,7 @@ int foobar = 8675309
 
 	program := p.ParseProgram()
 	if program == nil {
-		f.Fatalf("ParseProgram() returned nil")
+		t.Fatalf("ParseProgram() returned nil")
 	}
 	if len(program.Statements) != 3 {
 		t.Fatalf("program.Statements does not contain 3 statements. got=%d", len(program.Statements))
@@ -45,9 +45,9 @@ func testVarTypeIntStatement(t *testing.T, s ast.Statement, name string) bool {
 		return false
 	}
 
-	intStmt, ok := s.(*ast.IntStatement)
+	intStmt, ok := s.(*ast.VarTypeInt)
 	if !ok {
-		t.Errorf("s not *ast.IntStatement. got=%T", s)
+		t.Errorf("s not *ast.VarTypeInt. got=%T", s)
 		return false
 	}
 

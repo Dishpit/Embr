@@ -50,14 +50,14 @@ func testLiteralExpression(
 	expected interface{},
 ) bool {
 	switch v := expected.(type) {
+	case bool:
+		return testBooleanLiteral(t, exp, v)
 	case int:
 		return testIntegerLiteral(t, exp, int64(v))
 	case int64:
 		return testIntegerLiteral(t, exp, v)
 	case string:
 		return testIdentifier(t, exp, v)
-	case bool:
-		return testBooleanLiteral(t, exp, v)
 	}
 	t.Errorf("type of exp not handled. got=%T", exp)
 	return false
@@ -129,9 +129,9 @@ func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
 func TestParsingInfixExpressions(t *testing.T) {
 	infixTests := []struct {
 		input string
-		leftValue int64
+		leftValue interface{}
 		operator string
-		rightValue int64
+		rightValue interface{}
 	}{
 		{"5 + 5;", 5, "+", 5},
 		{"5 - 5;", 5, "-", 5},
@@ -166,17 +166,36 @@ func TestParsingInfixExpressions(t *testing.T) {
 			t.Fatalf("exp is not ast.InfixExpression. got=%T", stmt.Expression)
 		}
 
-		if !testIntegerLiteral(t, exp.Left, tt.leftValue) {
-			return
+		switch leftVal := tt.leftValue.(type) {
+		case int:
+			if !testIntegerLiteral(t, exp.Left, int64(leftVal)) {
+				return
+			}
+		case bool:
+			if !testBooleanLiteral(t, exp.Left, leftVal) {
+				return
+			}
+		default:
+			t.Fatalf("leftValue is not int or bool. got=%T", tt.leftValue)
 		}
 
 		if exp.Operator != tt.operator {
 			t.Fatalf("exp.Operator is not '%s'. got=%s", tt.operator, exp.Operator)
 		}
 
-		if !testIntegerLiteral(t, exp.Right, tt.rightValue) {
-			return
+		switch rightVal := tt.rightValue.(type) {
+		case int:
+			if !testIntegerLiteral(t, exp.Right, int64(rightVal)) {
+				return
+			}
+		case bool:
+			if !testBooleanLiteral(t, exp.Right, rightVal) {
+				return
+			}
+		default:
+			t.Fatalf("rightValue is not int or bool. got=%T", tt.rightValue)
 		}
+
 
 		if !testInfixExpression(t, stmt.Expression, tt.leftValue, tt.operator, tt.rightValue) {
 			return
@@ -208,7 +227,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
 		input string
 		operator string
-		integerValue int64
+		integerValue interface{}
 	}{
 		{"!5;", "!", 5},
 		{"-15;", "-", 15},
@@ -238,8 +257,18 @@ func TestParsingPrefixExpressions(t *testing.T) {
 		if exp.Operator != tt.operator {
 			t.Fatalf("exp.Operator is not '%s'. got=%s", tt.operator, exp.Operator)
 		}
-		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
-			return
+
+		switch intVal := tt.integerValue.(type) {
+		case int:
+			if !testIntegerLiteral(t, exp.Right, int64(intVal)) {
+				return
+			}
+		case bool:
+			if !testBooleanLiteral(t, exp.Right, intVal) {
+				return
+			}
+		default:
+			t.Fatalf("integerValue is not int or bool. got=%T", tt.integerValue)
 		}
 	}
 }

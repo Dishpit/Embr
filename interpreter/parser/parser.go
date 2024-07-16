@@ -70,6 +70,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.TRUE, p.parseBoolean)
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 
+	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
+
 	// read two tokens so curtoken and peektoken are both set
 	p.nextToken()
 	p.nextToken()

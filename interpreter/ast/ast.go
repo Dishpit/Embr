@@ -6,6 +6,29 @@ import (
 	"strings"
 )
 
+type CallExpression struct {
+	Token token.Token
+	Function Expression
+	Arguments []Expression
+}
+func (ce *CallExpression) expressionNode() {}
+func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *CallExpression) String() string {
+	var out bytes.Buffer
+
+	args := []string{}
+	for _, a := range ce.Arguments {
+		args = append(args, a.String())
+	}
+
+	out.WriteString(ce.Function.String())
+	out.WriteString("(")
+	out.WriteString(strings.Join(args, ", "))
+	out.WriteString(")")
+
+	return out.String()
+}
+
 type FunctionLiteral struct {
 	Token token.Token
 	Parameters []*Identifier
@@ -137,13 +160,13 @@ func (rs *ReturnStatement) statementNode() {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
 // variable types
-type VarTypeInt struct {
+type TypeInt struct {
 	Token token.Token	// the token.VARTYPE_INT token
 	Name *Identifier
 	Value Expression
 }
-func (vti *VarTypeInt) statementNode() {}
-func (vti *VarTypeInt) TokenLiteral() string { return vti.Token.Literal }
+func (ti *TypeInt) statementNode() {}
+func (ti *TypeInt) TokenLiteral() string { return ti.Token.Literal }
 
 type ExpressionStatement struct {
 	Token token.Token
@@ -210,14 +233,14 @@ func (p *Program) String() string {
 	return out.String()
 }
 
-func (vti *VarTypeInt) String() string {
+func (ti *TypeInt) String() string {
 	var out bytes.Buffer
 
-	out.WriteString(vti.TokenLiteral() + " ")
-	out.WriteString(vti.Name.String())
+	out.WriteString(ti.TokenLiteral() + " ")
+	out.WriteString(ti.Name.String())
 	out.WriteString(" = ")
-	if vti.Value != nil {
-		out.WriteString(vti.Value.String())
+	if ti.Value != nil {
+		out.WriteString(ti.Value.String())
 	}
 	out.WriteString(";")
 	return out.String()

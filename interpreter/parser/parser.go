@@ -28,6 +28,7 @@ var precedences = map[token.TokenType]int{
 	token.MINUS: SUM,
 	token.FSLASH: PRODUCT,
 	token.ASTERISK: PRODUCT,
+	token.LPAREN: CALL,
 }
 
 type Parser struct {

@@ -16,6 +16,10 @@ In Omega, functions are defined using the `fn` keyword. This is followed by the 
 
 All functions in Omega have a return type. If a function doesn't return anything, then its return type is void.
 
+## Calling Functions
+
+Functions can be called by just referring to the name of the function, followed by a pair of parentheses that contain any applicable arguments. For example: `my_func(420, 69);`
+
 ### Syntax
 
 The basic syntax for defining a function in Omega is as follows:

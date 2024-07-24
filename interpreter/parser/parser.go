@@ -420,8 +420,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
-func (p *Parser) parseTypeIntStatement() *ast.VarTypeInt {
-	stmt := &ast.VarTypeInt{Token: p.curToken}
+func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
+	stmt := &ast.TypeInt{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {
 		return nil

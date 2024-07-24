@@ -674,7 +674,7 @@ return 8675309;
 	}
 }
 
-func TestVarTypeIntStatements(t *testing.T) {
+func TestTypeIntStatements(t *testing.T) {
 	input := `
 int x = 420;
 int y = 69;
@@ -702,7 +702,7 @@ int foobar = 8675309;
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
-		if !testVarTypeIntStatement(t, stmt, tt.expectedIdentifier) {
+		if !testTypeIntStatement(t, stmt, tt.expectedIdentifier) {
 			return
 		}
 	}
@@ -721,15 +721,15 @@ func checkParserErrors(t *testing.T, p *Parser) {
 	t.FailNow()
 }
 
-func testVarTypeIntStatement(t *testing.T, s ast.Statement, name string) bool {
+func testTypeIntStatement(t *testing.T, s ast.Statement, name string) bool {
 	if s.TokenLiteral() != "int" {
 		t.Errorf("s.TokenLiteral not 'int'. got=%q", s.TokenLiteral())
 		return false
 	}
 
-	intStmt, ok := s.(*ast.VarTypeInt)
+	intStmt, ok := s.(*ast.TypeInt)
 	if !ok {
-		t.Errorf("s not *ast.VarTypeInt. got=%T", s)
+		t.Errorf("s not *ast.TypeInt. got=%T", s)
 		return false
 	}
 

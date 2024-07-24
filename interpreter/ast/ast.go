@@ -14,7 +14,7 @@ type FunctionLiteral struct {
 }
 func (fl *FunctionLiteral) expressionNode() {}
 func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
-func (fl *FunctionLiteral) ReturnTypeLiteral() string { return fl.ReturnType.Literal }
+func (fl *FunctionLiteral) ReturnTypeLiteral() string { return fl.ReturnType.Literal() }
 func (fl *FunctionLiteral) String() string {
 	var out bytes.Buffer
 
@@ -179,6 +179,9 @@ type Identifier struct {
 func (i *Identifier) expressionNode() {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 func (i *Identifier) String() string { return i.Value }
+func (i *Identifier) Literal() string {
+	return i.Token.Literal
+}
 
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {

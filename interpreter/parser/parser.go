@@ -57,6 +57,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
+	p.registerPrefix(token.FN_RETURN, p.parseIdentifier)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -90,9 +91,19 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	lit.Parameters = p.parseFunctionParameters()
 
-	if !p.expectPeek(token.TYPE_INT) {
+	if !p.expectPeek(token.FN_RETURN) {
 		return nil
 	}
+
+	p.nextToken()
+
+	if p.curToken.Type != token.TYPE_INT {
+		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
 	if !p.expectPeek(token.LBRACE) {
 		return nil
@@ -275,8 +286,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
-	case token.VARTYPE_INT:
-		return p.parseVarTypeIntStatement()
+	case token.TYPE_INT:
+		return p.parseTypeIntStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
@@ -340,7 +351,7 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
-func (p *Parser) parseVarTypeIntStatement() *ast.VarTypeInt {
+func (p *Parser) parseTypeIntStatement() *ast.VarTypeInt {
 	stmt := &ast.VarTypeInt{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {

@@ -14,7 +14,12 @@ type FunctionLiteral struct {
 }
 func (fl *FunctionLiteral) expressionNode() {}
 func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
-func (fl *FunctionLiteral) ReturnTypeLiteral() string { return fl.ReturnType.Literal() }
+func (fl *FunctionLiteral) ReturnTypeLiteral() string {
+	if fl.ReturnType != nil {
+		return fl.ReturnType.Literal()
+	}
+	return ""
+}
 func (fl *FunctionLiteral) String() string {
 	var out bytes.Buffer
 
@@ -27,7 +32,11 @@ func (fl *FunctionLiteral) String() string {
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(") ")
-	out.WriteString(fl.ReturnTypeLiteral())
+	
+	if fl.ReturnType != nil {
+		out.WriteString(fl.ReturnTypeLiteral())
+	}
+
 	out.WriteString(fl.Body.String())
 
 	return out.String()

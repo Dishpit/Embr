@@ -95,9 +95,9 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 		return nil
 	}
 
-	p.nextToken()
+	p.nextToken() // Consume FN_RETURN
 
-	if p.curToken.Type != token.TYPE_INT {
+	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID {
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
 		return nil
@@ -111,7 +111,41 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	lit.Body = p.parseBlockStatement()
 
+	// Validate return statements
+	if !p.validateReturnStatements(lit.Body, lit.ReturnType.Value) {
+		return nil
+	}
+
 	return lit
+}
+
+func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType string) bool {
+	hasReturnStatement := false
+
+	for _, stmt := range body.Statements {
+		if returnStmt, ok := stmt.(*ast.ReturnStatement); ok {
+			hasReturnStatement = true
+
+			if returnType == "int" && returnStmt.ReturnValue == nil {
+				msg := "expected return value of type int"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+			if returnType == "void" && returnStmt.ReturnValue != nil {
+				msg := "void functions should not return a value"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+		}
+	}
+
+	if returnType == "int" && !hasReturnStatement {
+		msg := "expected return value of type int"
+		p.errors = append(p.errors, msg)
+		return false
+	}
+
+	return true
 }
 
 func (p *Parser) parseFunctionParameters() []*ast.Identifier {
@@ -344,10 +378,16 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 
-	/* TODO: skipping expressions until we see a semicolon */
-	for !p.curTokenIs(token.SEMICOLON) {
+	if p.curTokenIs(token.SEMICOLON) {
+		return stmt
+	}
+
+	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
 	return stmt
 }
 

@@ -63,6 +63,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.IF, p.parseIfExpression)
+	p.registerPrefix(token.SEMICOLON, p.parseSemicolon)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -79,6 +80,11 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) parseSemicolon() ast.Expression {
+	p.nextToken()
+	return nil
 }
 
 func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
@@ -143,6 +149,10 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	// Validate return statements
 	if !p.validateReturnStatements(lit.Body, lit.ReturnType.Value) {
 		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
 	}
 
 	return lit
@@ -405,20 +415,20 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
-	p.nextToken()
 
-	if p.curTokenIs(token.SEMICOLON) {
-		return stmt
+	p.nextToken()
+	
+	if !p.curTokenIs(token.SEMICOLON) {
+			stmt.ReturnValue = p.parseExpression(LOWEST)
 	}
 
-	stmt.ReturnValue = p.parseExpression(LOWEST)
-
 	if p.peekTokenIs(token.SEMICOLON) {
-		p.nextToken()
+			p.nextToken()
 	}
 
 	return stmt
 }
+
 
 func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
 	stmt := &ast.TypeInt{Token: p.curToken}
@@ -433,8 +443,15 @@ func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
 		return nil
 	}
 
-	/* TODO: we're skipping expressions until we encounter a semicolon */
-	for !p.curTokenIs(token.SEMICOLON) {
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 

@@ -165,8 +165,8 @@ type TypeInt struct {
 	Name *Identifier
 	Value Expression
 }
-func (vti *TypeInt) statementNode() {}
-func (vti *TypeInt) TokenLiteral() string { return vti.Token.Literal }
+func (ti *TypeInt) statementNode() {}
+func (ti *TypeInt) TokenLiteral() string { return ti.Token.Literal }
 
 type ExpressionStatement struct {
 	Token token.Token
@@ -233,14 +233,14 @@ func (p *Program) String() string {
 	return out.String()
 }
 
-func (vti *TypeInt) String() string {
+func (ti *TypeInt) String() string {
 	var out bytes.Buffer
 
-	out.WriteString(vti.TokenLiteral() + " ")
-	out.WriteString(vti.Name.String())
+	out.WriteString(ti.TokenLiteral() + " ")
+	out.WriteString(ti.Name.String())
 	out.WriteString(" = ")
-	if vti.Value != nil {
-		out.WriteString(vti.Value.String())
+	if ti.Value != nil {
+		out.WriteString(ti.Value.String())
 	}
 	out.WriteString(";")
 	return out.String()

@@ -79,14 +79,9 @@ func (l *Lexer) NextToken() token.Token {
 	case '>':
 		tok = newToken(token.GT, l.ch)
 	case '@':
+		tok = newToken(token.FN_RETURN, l.ch)
 		l.readChar()
-		if isLetter(l.ch) {
-			tok.Literal = "@" + l.readIdentifier()
-			tok.Type = token.LookupIdent(tok.Literal)
-			return tok
-		}	else {
-			tok = newToken(token.ILLEGAL, l.ch)
-		}
+		return tok
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

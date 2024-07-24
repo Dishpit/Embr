@@ -44,6 +44,7 @@ const (
 	RPAREN		= ")"
 	LBRACE		= "{"
 	RBRACE		= "}"
+	FN_RETURN	= "@"
 
 	// keywords
 	FUNCTION				= "FUNCTION"
@@ -52,8 +53,8 @@ const (
 	FALSE						= "FALSE"
 	IF							= "IF"
 	ELSE						= "ELSE"
-	VARTYPE_INT			= "VARTYPE_INT"
-	RETTYPE_INT			= "RETTYPE_INT"
+	TYPE_INT				= "TYPE_INT"
+	TYPE_VOID				= "TYPE_VOID"
 )
 
 var keywords = map[string]TokenType{
@@ -66,8 +67,8 @@ var keywords = map[string]TokenType{
 	"else": ELSE,
 
 	// types
-	"@int": RETTYPE_INT,
-	"int": VARTYPE_INT,
+	"int": TYPE_INT,
+	"void": TYPE_VOID,
 }
 
 func LookupIdent(ident string) TokenType {

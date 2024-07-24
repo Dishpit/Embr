@@ -56,6 +56,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
+	p.registerPrefix(token.FN_RETURN, p.parseIdentifier)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -78,6 +80,99 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) parseFunctionLiteral() ast.Expression {
+	lit := &ast.FunctionLiteral{Token: p.curToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	lit.Parameters = p.parseFunctionParameters()
+
+	if !p.expectPeek(token.FN_RETURN) {
+		return nil
+	}
+
+	p.nextToken() // Consume FN_RETURN
+
+	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID {
+		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	lit.Body = p.parseBlockStatement()
+
+	// Validate return statements
+	if !p.validateReturnStatements(lit.Body, lit.ReturnType.Value) {
+		return nil
+	}
+
+	return lit
+}
+
+func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType string) bool {
+	hasReturnStatement := false
+
+	for _, stmt := range body.Statements {
+		if returnStmt, ok := stmt.(*ast.ReturnStatement); ok {
+			hasReturnStatement = true
+
+			if returnType == "int" && returnStmt.ReturnValue == nil {
+				msg := "expected return value of type int"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+			if returnType == "void" && returnStmt.ReturnValue != nil {
+				msg := "void functions should not return a value"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+		}
+	}
+
+	if returnType == "int" && !hasReturnStatement {
+		msg := "expected return value of type int"
+		p.errors = append(p.errors, msg)
+		return false
+	}
+
+	return true
+}
+
+func (p *Parser) parseFunctionParameters() []*ast.Identifier {
+	identifiers := []*ast.Identifier{}
+
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return identifiers
+	}
+
+	p.nextToken()
+
+	ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	identifiers = append(identifiers, ident)
+
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+		identifiers = append(identifiers, ident)
+	}
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return identifiers
 }
 
 func (p *Parser) parseIfExpression() ast.Expression {
@@ -225,8 +320,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
-	case token.VARTYPE_INT:
-		return p.parseVarTypeIntStatement()
+	case token.TYPE_INT:
+		return p.parseTypeIntStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
@@ -283,14 +378,20 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 
-	/* TODO: skipping expressions until we see a semicolon */
-	for !p.curTokenIs(token.SEMICOLON) {
+	if p.curTokenIs(token.SEMICOLON) {
+		return stmt
+	}
+
+	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
 	return stmt
 }
 
-func (p *Parser) parseVarTypeIntStatement() *ast.VarTypeInt {
+func (p *Parser) parseTypeIntStatement() *ast.VarTypeInt {
 	stmt := &ast.VarTypeInt{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {

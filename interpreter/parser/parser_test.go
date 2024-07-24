@@ -7,6 +7,75 @@ import (
 	"fmt"
 )
 
+func TestFunctionParameterParsing(t *testing.T) {
+	tests := []struct {
+		input            string
+		expectedParams   []string
+		expectedReturnType string
+	}{
+		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
+		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
+		{input: "fn(x, y, z) @int { return x + y + z; }", expectedParams: []string{"x", "y", "z"}, expectedReturnType: "int"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		stmt := program.Statements[0].(*ast.ExpressionStatement)
+		function := stmt.Expression.(*ast.FunctionLiteral)
+
+		if len(function.Parameters) != len(tt.expectedParams) {
+			t.Errorf("length parameters wrong. want %d, got=%d\n", len(tt.expectedParams), len(function.Parameters))
+		}
+
+		for i, ident := range tt.expectedParams {
+			testLiteralExpression(t, function.Parameters[i], ident)
+		}
+
+		if function.ReturnType.Value != tt.expectedReturnType {
+			t.Errorf("return type wrong. want %s, got=%s\n", tt.expectedReturnType, function.ReturnType.Value)
+		}
+	}
+}
+
+
+func TestFunctionLiteralParsing(t *testing.T) {
+	tests := []struct {
+		input            string
+		expectedParams   []string
+		expectedReturnType string
+	}{
+		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
+		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		stmt := program.Statements[0].(*ast.ExpressionStatement)
+		function := stmt.Expression.(*ast.FunctionLiteral)
+
+		if len(function.Parameters) != len(tt.expectedParams) {
+			t.Errorf("length parameters wrong. want %d, got=%d\n", len(tt.expectedParams), len(function.Parameters))
+		}
+
+		for i, ident := range tt.expectedParams {
+			testLiteralExpression(t, function.Parameters[i], ident)
+		}
+
+		if function.ReturnType.Value != tt.expectedReturnType {
+			t.Errorf("return type wrong. want %s, got=%s\n", tt.expectedReturnType, function.ReturnType.Value)
+		}
+	}
+}
+
+
 func TestIfExpression(t *testing.T) {
 	input := `if (x < y) { x }`
 

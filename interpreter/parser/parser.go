@@ -132,7 +132,7 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	p.nextToken() // Consume FN_RETURN
 
-	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID {
+	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID && p.curToken.Type != token.TYPE_BOOL {
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
 		return nil
@@ -172,6 +172,11 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 			}
 			if returnType == "void" && returnStmt.ReturnValue != nil {
 				msg := "void functions should not return a value"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+			if returnType == "bool" && returnStmt.ReturnValue != nil {
+				msg := "boolean functions should either retun true or false"
 				p.errors = append(p.errors, msg)
 				return false
 			}
@@ -361,6 +366,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.TYPE_INT:
 		return p.parseTypeIntStatement()
+	case token.TYPE_BOOL:
+		return p.parseTypeBoolStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
@@ -429,6 +436,33 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
+func (p *Parser) parseTypeBoolStatement() *ast.TypeBool {
+	stmt := &ast.TypeBool{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
 
 func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
 	stmt := &ast.TypeInt{Token: p.curToken}

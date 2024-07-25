@@ -8,10 +8,6 @@ type TokenType string
 type Token struct {
 	Type TokenType
 	Literal string
-	/* TODO: consider attaching filenames/line numbers/etc.
-	this will make it easier to debug production code.
-	note that it adds a lot of complexity,
-	but will be needed prior to a 1.0 launch */
 }
 
 const (
@@ -55,6 +51,7 @@ const (
 	ELSE						= "ELSE"
 	TYPE_INT				= "TYPE_INT"
 	TYPE_VOID				= "TYPE_VOID"
+	TYPE_BOOL				= "TYPE_BOOL"
 )
 
 var keywords = map[string]TokenType{
@@ -69,6 +66,7 @@ var keywords = map[string]TokenType{
 	// types
 	"int": TYPE_INT,
 	"void": TYPE_VOID,
+	"bool": TYPE_BOOL,
 }
 
 func LookupIdent(ident string) TokenType {

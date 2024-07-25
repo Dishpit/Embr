@@ -139,6 +139,7 @@ func TestFunctionLiteralParsing(t *testing.T) {
 	}{
 		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
 		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
+		{input: "fn() @bool {}", expectedParams: []string{}, expectedReturnType: "bool"},
 	}
 
 	for _, tt := range tests {
@@ -683,6 +684,38 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
+func TestTypeBoolStatements(t *testing.T) {
+	tests := []struct {
+		input string
+		expectedIdentifier string
+		expectedValue interface{}
+	}{
+		{"bool x = true;", "x", true},
+		{"bool y = false;", "y", false},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("program.Statements does not contain 1 statement. got=%d", len(program.Statements))
+		}
+
+		stmt := program.Statements[0]
+		if !testTypeBoolStatement(t, stmt, tt.expectedIdentifier) {
+			return
+		}
+
+		val := stmt.(*ast.TypeBool).Value
+		if !testLiteralExpression(t, val, tt.expectedValue) {
+			return
+		}
+	}
+}
+
 func TestTypeIntStatements(t *testing.T) {
 	tests := []struct {
 		input string
@@ -738,6 +771,30 @@ func testTypeIntStatement(t *testing.T, s ast.Statement, name string) bool {
 	intStmt, ok := s.(*ast.TypeInt)
 	if !ok {
 		t.Errorf("s not *ast.TypeInt. got=%T", s)
+		return false
+	}
+
+	if intStmt.Name.Value != name {
+		t.Errorf("intStmt.Name.Value not '%s'. got=%s", name, intStmt.Name.Value)
+		return false
+	}
+
+	if intStmt.Name.TokenLiteral() != name {
+		t.Errorf("intStmt.Name.TokenLiteral() not '%s'. got=%s", name, intStmt.Name.TokenLiteral())
+		return false
+	}
+	return true
+}
+
+func testTypeBoolStatement(t *testing.T, s ast.Statement, name string) bool {
+	if s.TokenLiteral() != "bool" {
+		t.Errorf("s.TokenLiteral not 'bool'. got=%q", s.TokenLiteral())
+		return false
+	}
+
+	intStmt, ok := s.(*ast.TypeBool)
+	if !ok {
+		t.Errorf("s not *ast.TypeBool. got=%T", s)
 		return false
 	}
 

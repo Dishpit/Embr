@@ -159,7 +159,7 @@ type ReturnStatement struct {
 func (rs *ReturnStatement) statementNode() {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
-// variable types
+// BEGIN VARIABLE TYPES
 type TypeInt struct {
 	Token token.Token	// the token.TYPE_INT token
 	Name *Identifier
@@ -175,6 +175,7 @@ type TypeBool struct {
 }
 func (tb *TypeBool) statementNode() {}
 func (tb *TypeBool) TokenLiteral() string { return tb.Token.Literal }
+// END VARIABLE TYPES
 
 type ExpressionStatement struct {
 	Token token.Token

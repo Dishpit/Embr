@@ -37,7 +37,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		ret_type := node.ReturnType
 		functionEnv := object.NewEnclosedEnvironment(env)
 		functionEnv.SetFunctionReturnType(object.ObjectType(ret_type.Value))
-		return &object.Function{Parameters: params, Env: functionEnv, Body: body, ReturnType: ret_type}
+
+		fn := &object.Function{Parameters: params, Env: functionEnv, Body: body, ReturnType: ret_type}
+		env.Set(node.Name.Value, fn)
+		return fn
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 	case *ast.ExpressionStatement:

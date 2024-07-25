@@ -132,7 +132,7 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	p.nextToken() // Consume FN_RETURN
 
-	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID {
+	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID && p.curToken.Type != token.TYPE_BOOL {
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
 		return nil
@@ -165,6 +165,7 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 		if returnStmt, ok := stmt.(*ast.ReturnStatement); ok {
 			hasReturnStatement = true
 
+			// TODO: actually validate typing beyond nil
 			if returnType == "int" && returnStmt.ReturnValue == nil {
 				msg := "expected return value of type int"
 				p.errors = append(p.errors, msg)
@@ -172,6 +173,11 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 			}
 			if returnType == "void" && returnStmt.ReturnValue != nil {
 				msg := "void functions should not return a value"
+				p.errors = append(p.errors, msg)
+				return false
+			}
+			if returnType == "bool" && returnStmt.ReturnValue != nil {
+				msg := "boolean functions should either retun true or false"
 				p.errors = append(p.errors, msg)
 				return false
 			}

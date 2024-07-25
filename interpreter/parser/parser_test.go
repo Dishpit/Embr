@@ -139,6 +139,7 @@ func TestFunctionLiteralParsing(t *testing.T) {
 	}{
 		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
 		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
+		{input: "fn() @bool {}", expectedParams: []string{}, expectedReturnType: "bool"},
 	}
 
 	for _, tt := range tests {

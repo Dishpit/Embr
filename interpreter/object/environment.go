@@ -14,6 +14,7 @@ func NewEnvironment() *Environment {
 type Environment struct {
 	store map[string]Object
 	outer *Environment
+	functionReturnType ObjectType
 }
 
 func (e *Environment) Get(name string) (Object, bool) {
@@ -27,4 +28,12 @@ func (e *Environment) Get(name string) (Object, bool) {
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
+}
+
+func (e *Environment) SetFunctionReturnType(t ObjectType) {
+	e.functionReturnType = t
+}
+
+func (e *Environment) GetFunctionReturnType() ObjectType {
+	return e.functionReturnType
 }

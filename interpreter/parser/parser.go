@@ -165,7 +165,6 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 		if returnStmt, ok := stmt.(*ast.ReturnStatement); ok {
 			hasReturnStatement = true
 
-			// TODO: actually validate typing beyond nil
 			if returnType == "int" && returnStmt.ReturnValue == nil {
 				msg := "expected return value of type int"
 				p.errors = append(p.errors, msg)

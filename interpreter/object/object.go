@@ -7,7 +7,14 @@ const (
 	BOOLEAN_OBJ 			= "BOOLEAN"
 	VOID_OBJ					= "VOID"
 	RETURN_VALUE_OBJ	= "RETURN_VALUE"
+	ERROR_OBJ					= "ERROR"
 )
+
+type Error struct {
+	Message string
+}
+func (e *Error) Type() ObjectType { return ERROR_OBJ }
+func (e *Error) Inspect() string { return "SKILL ISSUE: " + e.Message }
 
 type ReturnValue struct {
 	Value Object

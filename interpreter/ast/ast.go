@@ -31,6 +31,7 @@ func (ce *CallExpression) String() string {
 
 type FunctionLiteral struct {
 	Token token.Token
+	Name *Identifier
 	Parameters []*Identifier
 	ReturnType *Identifier
 	Body *BlockStatement
@@ -51,7 +52,8 @@ func (fl *FunctionLiteral) String() string {
 		params = append(params, p.String())
 	}
 
-	out.WriteString(fl.TokenLiteral())
+	out.WriteString(fl.TokenLiteral() + " ")
+	out.WriteString(fl.Name.String())
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(") ")

@@ -5,6 +5,7 @@ import "fmt"
 const (
 	INTEGER_OBJ = "INTEGER"
 	BOOLEAN_OBJ = "BOOLEAN"
+	VOID_OBJ		= "VOID"
 )
 
 type ObjectType string
@@ -24,3 +25,7 @@ type Boolean struct {
 }
 func (b *Boolean) Type() ObjectType { return BOOLEAN_OBJ }
 func (b *Boolean) Inspect() string { return fmt.Sprintf("%t", b.Value) }
+
+type Void struct{}
+func (v *Void) Type() ObjectType { return VOID_OBJ }
+func (v *Void) Inspect() string { return "void" }

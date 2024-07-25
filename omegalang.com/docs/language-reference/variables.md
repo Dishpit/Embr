@@ -20,13 +20,14 @@ int my_integer = 42069;
 
 ## Data Types
 
-Currently, Omega supports one basic data type: integers.
+Currently, Omega supports two basic data types: integers and booleans.
 
 ## Examples
 
-Declaring an integer variable with an initial value:
+Declaring some variables with an initial values:
 
 ```omega
 int weed_number = 420;
 int sex_number = 69;
+bool is_hungry = true;
 ```

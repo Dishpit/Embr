@@ -120,6 +120,12 @@ func (p *Parser) parseCallArguments() []ast.Expression {
 func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{Token: p.curToken}
 
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	lit.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
@@ -164,19 +170,20 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 	for _, stmt := range body.Statements {
 		if returnStmt, ok := stmt.(*ast.ReturnStatement); ok {
 			hasReturnStatement = true
+			returnExprType := p.inferExpressionType(returnStmt.ReturnValue)
 
-			if returnType == "int" && returnStmt.ReturnValue == nil {
-				msg := "expected return value of type int"
+			if returnType == "int" && returnExprType != "int" {
+				msg := fmt.Sprintf("expected return value of type int, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "void" && returnStmt.ReturnValue != nil {
+			if returnType == "void" && returnExprType != "void" {
 				msg := "void functions should not return a value"
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "bool" && returnStmt.ReturnValue != nil {
-				msg := "boolean functions should either retun true or false"
+			if returnType == "bool" && returnExprType != "bool" {
+				msg := fmt.Sprintf("expected return value of type bool, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
 			}
@@ -190,6 +197,28 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 	}
 
 	return true
+}
+
+func (p *Parser) inferExpressionType(expr ast.Expression) string {
+	switch expr := expr.(type) {
+	case *ast.IntegerLiteral:
+		return "int"
+	case *ast.Boolean:
+		return "bool"
+	case *ast.Identifier:
+		return "int"
+	case *ast.InfixExpression:
+		leftType := p.inferExpressionType(expr.Left)
+		rightType := p.inferExpressionType(expr.Right)
+		if leftType == rightType {
+			return leftType
+		}
+		return "unknown"
+	case *ast.PrefixExpression:
+		return p.inferExpressionType(expr.Right)
+	default:
+		return "unknown"
+	}
 }
 
 func (p *Parser) parseFunctionParameters() []*ast.Identifier {

@@ -35,7 +35,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		params := node.Parameters
 		body := node.Body
 		ret_type := node.ReturnType
-		return &object.Function{Parameters: params, Env: env, Body: body, ReturnType: ret_type}
+		functionEnv := object.NewEnclosedEnvironment(env)
+		functionEnv.SetFunctionReturnType(object.ObjectType(ret_type.Value))
+
+		fn := &object.Function{Parameters: params, Env: functionEnv, Body: body, ReturnType: ret_type}
+		env.Set(node.Name.Value, fn)
+		return fn
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 	case *ast.ExpressionStatement:
@@ -47,6 +52,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		return evalPrefixExpression(node.Operator, right)
 	case *ast.TypeInt:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		env.Set(node.Name.Value, val)
+	case *ast.TypeBool:
 		val := Eval(node.Value, env)
 		if isError(val) {
 			return val
@@ -72,6 +83,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		val := Eval(node.ReturnValue, env)
 		if isError(val) {
 			return val
+		}
+
+		functionReturnType := env.GetFunctionReturnType()
+		if functionReturnType != val.Type() {
+			return newError("return type mismatch: expected %s, got %s", functionReturnType, val.Type())
 		}
 		return &object.ReturnValue{Value: val}
 	case *ast.IfExpression:

@@ -7,6 +7,19 @@ import (
 	"testing"
 )
 
+func TestFunctionApplication(t *testing.T) {
+	tests := []struct {
+		input string
+		expected int64
+	}{
+		{"fn(x) @void { x; };(5)", 5},
+	}
+
+	for _, tt := range tests {
+		testIntegerObject(t, testEval(tt.input), tt.expected)
+	}
+}
+
 func TestFunctionObject(t *testing.T) {
 	input := "fn(x) @void {x + 2;};"
 

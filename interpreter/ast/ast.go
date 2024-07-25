@@ -161,12 +161,20 @@ func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
 // variable types
 type TypeInt struct {
-	Token token.Token	// the token.VARTYPE_INT token
+	Token token.Token	// the token.TYPE_INT token
 	Name *Identifier
 	Value Expression
 }
 func (ti *TypeInt) statementNode() {}
 func (ti *TypeInt) TokenLiteral() string { return ti.Token.Literal }
+
+type TypeBool struct {
+	Token token.Token
+	Name *Identifier
+	Value Expression
+}
+func (tb *TypeBool) statementNode() {}
+func (tb *TypeBool) TokenLiteral() string { return tb.Token.Literal }
 
 type ExpressionStatement struct {
 	Token token.Token
@@ -230,6 +238,19 @@ func (p *Program) String() string {
 		out.WriteString(s.String())
 	}
 
+	return out.String()
+}
+
+func (tb *TypeBool) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(tb.TokenLiteral() + " ")
+	out.WriteString(tb.Name.String())
+	out.WriteString(" = ")
+	if tb.Value != nil {
+		out.WriteString(tb.Value.String())
+	}
+	out.WriteString(";")
 	return out.String()
 }
 

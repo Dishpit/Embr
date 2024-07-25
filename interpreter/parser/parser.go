@@ -361,6 +361,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.TYPE_INT:
 		return p.parseTypeIntStatement()
+	case token.TYPE_BOOL:
+		return p.parseTypeBoolStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
@@ -429,6 +431,33 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
+func (p *Parser) parseTypeBoolStatement() *ast.TypeBool {
+	stmt := &ast.TypeBool{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
 
 func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
 	stmt := &ast.TypeInt{Token: p.curToken}

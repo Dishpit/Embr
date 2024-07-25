@@ -4,11 +4,11 @@ import (
 	"interpreter/lexer"
 	"interpreter/object"
 	"interpreter/parser"
-	"tesing"
+	"testing"
 )
 
 func TestEvalIntegerExpression(t *testing.T) {
-	test := []struct {
+	tests := []struct {
 		input string
 		expected int64
 	}{
@@ -17,14 +17,14 @@ func TestEvalIntegerExpression(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		evaluated = testEval(tt.input)
+		evaluated := testEval(tt.input)
 		testIntegerObject(t, evaluated, tt.expected)
 	}
 }
 
 func testEval(input string) object.Object {
 	l := lexer.New(input)
-	p := parse.New(l)
+	p := parser.New(l)
 	program := p.ParseProgram()
 
 	return Eval(program)

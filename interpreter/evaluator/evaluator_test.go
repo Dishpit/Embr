@@ -8,7 +8,7 @@ import (
 )
 
 func TestFunctionObject(t *testing.T) {
-	input := "fn my_func(x) @void {x + 2;};"
+	input := "fn(x) @void {x + 2;};"
 
 	evaluated := testEval(input)
 	fn, ok := evaluated.(*object.Function)

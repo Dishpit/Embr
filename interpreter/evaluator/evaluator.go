@@ -21,6 +21,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.Program:
 		return evalProgram(node, env)
+	case *ast.FunctionLiteral:
+		params := node.Parameters
+		body := node.Body
+		ret_type := node.ReturnType
+		return &object.Function{Parameters: params, Env: env, Body: body, ReturnType: ret_type}
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 	case *ast.ExpressionStatement:
@@ -116,7 +121,6 @@ func isTruthy(obj object.Object) bool {
 	case FALSE:
 		return false
 	default:
-		// TODO: consider evaluating to VOID instead of true here
 		return true
 	}
 }

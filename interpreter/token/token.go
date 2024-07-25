@@ -55,6 +55,7 @@ const (
 	ELSE						= "ELSE"
 	TYPE_INT				= "TYPE_INT"
 	TYPE_VOID				= "TYPE_VOID"
+	TYPE_BOOL				= "TYPE_BOOL"
 )
 
 var keywords = map[string]TokenType{
@@ -69,6 +70,7 @@ var keywords = map[string]TokenType{
 	// types
 	"int": TYPE_INT,
 	"void": TYPE_VOID,
+	"bool": TYPE_BOOL,
 }
 
 func LookupIdent(ident string) TokenType {

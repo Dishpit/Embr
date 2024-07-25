@@ -16,4 +16,5 @@ Every function has a return type, just like how every variable has a value type.
 
 | Type | Keyword | Usage |
 |------|---------|-------|
+| Void | `@void` | A special return type for functions that don't return anything. |
 | Integer | `int` or `@int`  | Regular integers, such as `420`, `69`, or `8675309` |

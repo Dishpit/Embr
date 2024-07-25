@@ -30,12 +30,12 @@ if (5 < 10) {
 		expectedType token.TokenType
 		expectedLiteral string
 	}{
-		{token.VARTYPE_INT, "int"},
+		{token.TYPE_INT, "int"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.VARTYPE_INT, "int"},
+		{token.TYPE_INT, "int"},
 		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
@@ -47,7 +47,8 @@ if (5 < 10) {
 		{token.COMMA, ","},
 		{token.IDENT, "y"},
 		{token.RPAREN, ")"},
-		{token.RETTYPE_INT, "@int"},
+		{token.FN_RETURN, "@"},
+		{token.TYPE_INT, "int"},
 		{token.LBRACE, "{"},
 		{token.RETURN, "return"},
 		{token.IDENT, "x"},
@@ -56,7 +57,7 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
-		{token.VARTYPE_INT, "int"},
+		{token.TYPE_INT, "int"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
 		{token.IDENT, "add_two"},

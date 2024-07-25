@@ -3,10 +3,17 @@ package object
 import "fmt"
 
 const (
-	INTEGER_OBJ = "INTEGER"
-	BOOLEAN_OBJ = "BOOLEAN"
-	VOID_OBJ		= "VOID"
+	INTEGER_OBJ 			= "INTEGER"
+	BOOLEAN_OBJ 			= "BOOLEAN"
+	VOID_OBJ					= "VOID"
+	RETURN_VALUE_OBJ	= "RETURN_VALUE"
 )
+
+type ReturnValue struct {
+	Value Object
+}
+func (rv *ReturnValue) Type() ObjectType { return RETURN_VALUE_OBJ }
+func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
 
 type ObjectType string
 type Object interface {

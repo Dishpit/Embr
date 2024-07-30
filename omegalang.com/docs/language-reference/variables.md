@@ -20,7 +20,7 @@ int my_integer = 42069;
 
 ## Data Types
 
-Currently, Omega supports two basic data types: integers and booleans.
+Currently, Omega supports three basic data types: integers, booleans, and strings.
 
 ## Examples
 
@@ -30,4 +30,5 @@ Declaring some variables with an initial values:
 int weed_number = 420;
 int sex_number = 69;
 bool is_hungry = true;
+str hello_world = "Hello, Omega!";
 ```

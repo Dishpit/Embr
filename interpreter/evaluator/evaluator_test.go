@@ -7,12 +7,40 @@ import (
 	"testing"
 )
 
+func TestStringConcatenation(t *testing.T) {
+	input := `"Hello" + " " + "Omega!"`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+	}
+
+	if str.Value != "Hello Omega!" {
+		t.Errorf("String has wrong value. got=%q", str.Value)
+	}
+}
+
+func TestStringLiteral(t *testing.T) {
+	input := `"Hello World!"`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+	}
+
+	if str.Value != "Hello World!" {
+		t.Errorf("String has wrong value. got=%q", str.Value)
+	}
+}
+
 func TestFunctionApplication(t *testing.T) {
 	tests := []struct {
 		input string
 		expected int64
 	}{
-		{"fn(x) @void { x; };(5)", 5},
+		{"fn main(x) @int { return x; }; main(5)", 5},
 	}
 
 	for _, tt := range tests {
@@ -21,7 +49,7 @@ func TestFunctionApplication(t *testing.T) {
 }
 
 func TestFunctionObject(t *testing.T) {
-	input := "fn(x) @void {x + 2;};"
+	input := "fn main(x) @int { return x + 2;};"
 
 	evaluated := testEval(input)
 	fn, ok := evaluated.(*object.Function)
@@ -37,7 +65,7 @@ func TestFunctionObject(t *testing.T) {
 		t.Fatalf("parameter is not 'x'. got=%q", fn.Parameters[0])
 	}
 
-	expectedBody := "(x + 2)"
+	expectedBody := "return (x + 2);"
 
 	if fn.Body.String() != expectedBody {
 		t.Fatalf("body is not %q. got=%q", expectedBody, fn.Body.String())
@@ -80,6 +108,10 @@ func TestErrorHandling(t *testing.T) {
 		{
 			"foobar",
 			"identifier not found: foobar",
+		},
+		{
+			`"Hello" - "Omega"`,
+			"unknown operator: STRING - STRING",
 		},
 	}
 

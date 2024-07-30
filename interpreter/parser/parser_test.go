@@ -7,6 +7,25 @@ import (
 	"fmt"
 )
 
+func TestStringLiteralExpression(t *testing.T) {
+	input := `"hello world";`
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	literal, ok := stmt.Expression.(*ast.StringLiteral)
+	if !ok {
+		t.Fatalf("exp not *ast.StringLiteral. got=%T", stmt.Expression)
+	}
+
+	if literal.Value != "hello world" {
+		t.Errorf("literal.Value not %q. got=%q", "hello world", literal.Value)
+	}
+}
+
 func TestCallExpressionParsing(t *testing.T) {
 	input := "add(1, 2 * 3, 4 + 5);"
 
@@ -102,9 +121,9 @@ func TestFunctionParameterParsing(t *testing.T) {
 		expectedParams   []string
 		expectedReturnType string
 	}{
-		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
-		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
-		{input: "fn(x, y, z) @int { return x + y + z; }", expectedParams: []string{"x", "y", "z"}, expectedReturnType: "int"},
+		{input: "fn main() @void {}", expectedParams: []string{}, expectedReturnType: "VOID"},
+		{input: "fn main(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "INTEGER"},
+		{input: "fn main(x, y, z) @int { return x + y + z; }", expectedParams: []string{"x", "y", "z"}, expectedReturnType: "INTEGER"},
 	}
 
 	for _, tt := range tests {
@@ -137,9 +156,9 @@ func TestFunctionLiteralParsing(t *testing.T) {
 		expectedParams   []string
 		expectedReturnType string
 	}{
-		{input: "fn() @void {}", expectedParams: []string{}, expectedReturnType: "void"},
-		{input: "fn(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "int"},
-		{input: "fn() @bool {}", expectedParams: []string{}, expectedReturnType: "bool"},
+		{input: "fn main() @void {}", expectedParams: []string{}, expectedReturnType: "VOID"},
+		{input: "fn main(x) @int { return x; }", expectedParams: []string{"x"}, expectedReturnType: "INTEGER"},
+		{input: "fn main() @bool {}", expectedParams: []string{}, expectedReturnType: "BOOLEAN"},
 	}
 
 	for _, tt := range tests {

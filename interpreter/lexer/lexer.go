@@ -82,6 +82,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.FN_RETURN, l.ch)
 		l.readChar()
 		return tok
+	case '"':
+		tok.Type = token.STR
+		tok.Literal = l.readString()
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -103,6 +106,17 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
+func (l *Lexer) readString() string {
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' || l.ch == 0 {
+			break
+		}
+	}
+	return l.input[position:l.position]
+}
+
 /* peekChar is basically readChar except it doesn't increment l.position and l.readPosition.
 the reason is we only want to peek ahead and not move around in it so we know
 what a call to readChar would return */
@@ -119,6 +133,9 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 func (l *Lexer) readIdentifier() string {
+	/* 
+	TODO: allow for numbers to be included in identifiers, as long as they're not the first character
+	*/
 	position := l.position
 	for isLetter(l.ch) {
 		l.readChar()

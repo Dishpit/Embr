@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+func (sl *StringLiteral) expressionNode() {}
+func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
+func (sl *StringLiteral) String() string { return sl.Token.Literal }
+
 type CallExpression struct {
 	Token token.Token
 	Function Expression
@@ -177,6 +185,14 @@ type TypeBool struct {
 }
 func (tb *TypeBool) statementNode() {}
 func (tb *TypeBool) TokenLiteral() string { return tb.Token.Literal }
+
+type TypeString struct {
+	Token token.Token
+	Name *Identifier
+	Value Expression
+}
+func (ts *TypeString) statementNode() {}
+func (ts *TypeString) TokenLiteral() string { return ts.Token.Literal }
 // END VARIABLE TYPES
 
 type ExpressionStatement struct {
@@ -265,6 +281,19 @@ func (ti *TypeInt) String() string {
 	out.WriteString(" = ")
 	if ti.Value != nil {
 		out.WriteString(ti.Value.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
+func (ts *TypeString) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(ts.TokenLiteral() + " ")
+	out.WriteString(ts.Name.String())
+	out.WriteString(" = ")
+	if ts.Value != nil {
+		out.WriteString(ts.Value.String())
 	}
 	out.WriteString(";")
 	return out.String()

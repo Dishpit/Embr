@@ -4,6 +4,7 @@ import (
 	"interpreter/ast"
 	"interpreter/lexer"
 	"interpreter/token"
+	"interpreter/object"
 	"fmt"
 	"strconv"
 )
@@ -64,6 +65,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.SEMICOLON, p.parseSemicolon)
+	p.registerPrefix(token.STR, p.parseStringLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -80,6 +82,10 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) parseStringLiteral() ast.Expression {
+	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 func (p *Parser) parseSemicolon() ast.Expression {
@@ -138,13 +144,23 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	p.nextToken() // Consume FN_RETURN
 
-	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID && p.curToken.Type != token.TYPE_BOOL {
+	var returnType object.ObjectType
+	switch p.curToken.Type {
+	case token.TYPE_INT:
+		returnType = object.INTEGER_OBJ
+	case token.TYPE_VOID:
+		returnType = object.VOID_OBJ
+	case token.TYPE_BOOL:
+		returnType = object.BOOLEAN_OBJ
+	case token.TYPE_STRING:
+		returnType = object.STRING_OBJ
+	default:
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
 		return nil
 	}
 
-	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: string(returnType)}
 
 	if !p.expectPeek(token.LBRACE) {
 		return nil
@@ -172,17 +188,17 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 			hasReturnStatement = true
 			returnExprType := p.inferExpressionType(returnStmt.ReturnValue)
 
-			if returnType == "int" && returnExprType != "int" {
+			if returnType == object.INTEGER_OBJ && returnExprType != object.INTEGER_OBJ {
 				msg := fmt.Sprintf("expected return value of type int, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "void" && returnExprType != "void" {
+			if returnType == object.VOID_OBJ && returnExprType != object.VOID_OBJ {
 				msg := "void functions should not return a value"
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "bool" && returnExprType != "bool" {
+			if returnType == object.BOOLEAN_OBJ && returnExprType != object.BOOLEAN_OBJ {
 				msg := fmt.Sprintf("expected return value of type bool, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
@@ -190,7 +206,7 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 		}
 	}
 
-	if returnType == "int" && !hasReturnStatement {
+	if returnType == object.INTEGER_OBJ && !hasReturnStatement {
 		msg := "expected return value of type int"
 		p.errors = append(p.errors, msg)
 		return false
@@ -202,11 +218,11 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 func (p *Parser) inferExpressionType(expr ast.Expression) string {
 	switch expr := expr.(type) {
 	case *ast.IntegerLiteral:
-		return "int"
+		return object.INTEGER_OBJ
 	case *ast.Boolean:
-		return "bool"
+		return object.BOOLEAN_OBJ
 	case *ast.Identifier:
-		return "int"
+		return object.INTEGER_OBJ
 	case *ast.InfixExpression:
 		leftType := p.inferExpressionType(expr.Left)
 		rightType := p.inferExpressionType(expr.Right)
@@ -395,6 +411,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.TYPE_INT:
 		return p.parseTypeIntStatement()
+	case token.TYPE_STRING:
+		return p.parseTypeStringStatement()
 	case token.TYPE_BOOL:
 		return p.parseTypeBoolStatement()
 	case token.RETURN:
@@ -473,6 +491,34 @@ func (p *Parser) parseTypeBoolStatement() *ast.TypeBool {
 	}
 
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) parseTypeStringStatement() *ast.TypeString {
+	stmt := &ast.TypeString{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal }
 
 	if !p.expectPeek(token.ASSIGN) {
 		return nil

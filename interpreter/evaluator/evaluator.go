@@ -78,6 +78,21 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return newError("type mismatch: expected %s, got %s", object.STRING_OBJ, val.Type())
 		}
 		env.Set(node.Name.Value, val)
+	case *ast.TypeArray:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		if val.Type() != object.ARRAY_OBJ {
+			return newError("type mismatch: expected %s, got %s", object.ARRAY_OBJ, val.Type())
+		}
+		env.Set(node.Name.Value, val)
+	case *ast.ArrayLiteral:
+		elements := evalExpressions(node.Elements, env)
+		if len(elements) == 1 && isError(elements[0]) {
+			return elements[0]
+		}
+		return &object.Array{Elements: elements}
 	case *ast.InfixExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {

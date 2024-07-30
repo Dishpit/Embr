@@ -18,3 +18,4 @@ Every function has a return type, just like how every variable has a value type.
 |------|---------|-------|
 | Void | `@void` | A special return type for functions that don't return anything. |
 | Integer | `int` or `@int`  | Regular integers, such as `420`, `69`, or `8675309` |
+| String | `str` or `@str`  | Strings of text, encapsulated in double-quotations, such as `"Hello, Omega!"` or `"Zaphod Beeblebrox"`. |

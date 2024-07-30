@@ -83,7 +83,7 @@ func (l *Lexer) NextToken() token.Token {
 		l.readChar()
 		return tok
 	case '"':
-		tok.Type = token.STR
+		tok.Type = token.STRING
 		tok.Literal = l.readString()
 	case 0:
 		tok.Literal = ""

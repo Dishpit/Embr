@@ -65,7 +65,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.SEMICOLON, p.parseSemicolon)
-	p.registerPrefix(token.STR, p.parseStringLiteral)
+	p.registerPrefix(token.STRING, p.parseStringLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -221,6 +221,8 @@ func (p *Parser) inferExpressionType(expr ast.Expression) string {
 		return object.INTEGER_OBJ
 	case *ast.Boolean:
 		return object.BOOLEAN_OBJ
+	case *ast.StringLiteral:
+		return object.STRING_OBJ
 	case *ast.Identifier:
 		return object.INTEGER_OBJ
 	case *ast.InfixExpression:
@@ -504,6 +506,12 @@ func (p *Parser) parseTypeBoolStatement() *ast.TypeBool {
 		return nil
 	}
 
+	if p.inferExpressionType(stmt.Value) != object.BOOLEAN_OBJ {
+		msg := fmt.Sprintf("type mismatch: expected %s, got %s", object.BOOLEAN_OBJ, p.inferExpressionType(stmt.Value))
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -532,6 +540,12 @@ func (p *Parser) parseTypeStringStatement() *ast.TypeString {
 		return nil
 	}
 
+	if p.inferExpressionType(stmt.Value) != object.STRING_OBJ {
+		msg := fmt.Sprintf("type mismatch: expected %s, got %s", object.STRING_OBJ, p.inferExpressionType(stmt.Value))
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -557,6 +571,12 @@ func (p *Parser) parseTypeIntStatement() *ast.TypeInt {
 	stmt.Value = p.parseExpression(LOWEST)
 
 	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.inferExpressionType(stmt.Value) != object.INTEGER_OBJ {
+		msg := fmt.Sprintf("type mismatch: expected %s, got %s", object.INTEGER_OBJ, p.inferExpressionType(stmt.Value))
+		p.errors = append(p.errors, msg)
 		return nil
 	}
 

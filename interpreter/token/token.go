@@ -18,6 +18,7 @@ const (
 	// identifiers and literals
 	IDENT	= "IDENT" // add, foobar, x, y, my_var, etc
 	INT		= "INT"		// 460, 69, 8675309, etc
+	STR		= "STRING" // "foobar", "test", "Hello, Omega!"
 
 	// operators
 	ASSIGN		= "="
@@ -52,6 +53,7 @@ const (
 	TYPE_INT				= "TYPE_INT"
 	TYPE_VOID				= "TYPE_VOID"
 	TYPE_BOOL				= "TYPE_BOOL"
+	TYPE_STRING			= "TYPE_STRING"
 )
 
 var keywords = map[string]TokenType{
@@ -67,6 +69,7 @@ var keywords = map[string]TokenType{
 	"int": TYPE_INT,
 	"void": TYPE_VOID,
 	"bool": TYPE_BOOL,
+	"str": TYPE_STRING,
 }
 
 func LookupIdent(ident string) TokenType {

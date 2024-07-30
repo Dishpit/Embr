@@ -18,7 +18,7 @@ const (
 	// identifiers and literals
 	IDENT	= "IDENT" // add, foobar, x, y, my_var, etc
 	INT		= "INT"		// 460, 69, 8675309, etc
-	STR		= "STRING" // "foobar", "test", "Hello, Omega!"
+	STRING		= "STRING" // "foobar", "test", "Hello, Omega!"
 
 	// operators
 	ASSIGN		= "="

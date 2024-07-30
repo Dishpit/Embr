@@ -3,12 +3,13 @@ package object
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
 	env.outer = outer
+	env.functionReturnType = outer.functionReturnType
 	return env
 }
 
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil}
+	return &Environment{store: s, outer: nil, functionReturnType: ""}
 }
 
 type Environment struct {

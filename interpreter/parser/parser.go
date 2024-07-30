@@ -4,6 +4,7 @@ import (
 	"interpreter/ast"
 	"interpreter/lexer"
 	"interpreter/token"
+	"interpreter/object"
 	"fmt"
 	"strconv"
 )
@@ -138,13 +139,21 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	p.nextToken() // Consume FN_RETURN
 
-	if p.curToken.Type != token.TYPE_INT && p.curToken.Type != token.TYPE_VOID && p.curToken.Type != token.TYPE_BOOL {
+	var returnType object.ObjectType
+	switch p.curToken.Type {
+	case token.TYPE_INT:
+		returnType = object.INTEGER_OBJ
+	case token.TYPE_VOID:
+		returnType = object.VOID_OBJ
+	case token.TYPE_BOOL:
+		returnType = object.BOOLEAN_OBJ
+	default:
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
 		return nil
 	}
 
-	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	lit.ReturnType = &ast.Identifier{Token: p.curToken, Value: string(returnType)}
 
 	if !p.expectPeek(token.LBRACE) {
 		return nil
@@ -172,17 +181,17 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 			hasReturnStatement = true
 			returnExprType := p.inferExpressionType(returnStmt.ReturnValue)
 
-			if returnType == "int" && returnExprType != "int" {
+			if returnType == object.INTEGER_OBJ && returnExprType != object.INTEGER_OBJ {
 				msg := fmt.Sprintf("expected return value of type int, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "void" && returnExprType != "void" {
+			if returnType == object.VOID_OBJ && returnExprType != object.VOID_OBJ {
 				msg := "void functions should not return a value"
 				p.errors = append(p.errors, msg)
 				return false
 			}
-			if returnType == "bool" && returnExprType != "bool" {
+			if returnType == object.BOOLEAN_OBJ && returnExprType != object.BOOLEAN_OBJ {
 				msg := fmt.Sprintf("expected return value of type bool, got %s instead", returnExprType)
 				p.errors = append(p.errors, msg)
 				return false
@@ -190,7 +199,7 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 		}
 	}
 
-	if returnType == "int" && !hasReturnStatement {
+	if returnType == object.INTEGER_OBJ && !hasReturnStatement {
 		msg := "expected return value of type int"
 		p.errors = append(p.errors, msg)
 		return false
@@ -202,11 +211,11 @@ func (p *Parser) validateReturnStatements(body *ast.BlockStatement, returnType s
 func (p *Parser) inferExpressionType(expr ast.Expression) string {
 	switch expr := expr.(type) {
 	case *ast.IntegerLiteral:
-		return "int"
+		return object.INTEGER_OBJ
 	case *ast.Boolean:
-		return "bool"
+		return object.BOOLEAN_OBJ
 	case *ast.Identifier:
-		return "int"
+		return object.INTEGER_OBJ
 	case *ast.InfixExpression:
 		leftType := p.inferExpressionType(expr.Left)
 		rightType := p.inferExpressionType(expr.Right)

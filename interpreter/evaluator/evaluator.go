@@ -63,6 +63,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return val
 		}
 		env.Set(node.Name.Value, val)
+	case *ast.TypeString:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		env.Set(node.Name.Value, val)
 	case *ast.InfixExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {

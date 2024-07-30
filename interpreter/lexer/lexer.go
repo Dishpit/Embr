@@ -133,6 +133,9 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 func (l *Lexer) readIdentifier() string {
+	/* 
+	TODO: allow for numbers to be included in identifiers, as long as they're not the first character
+	*/
 	position := l.position
 	for isLetter(l.ch) {
 		l.readChar()

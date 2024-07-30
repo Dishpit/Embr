@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+type ArrayLiteral struct {
+	Token token.Token
+	Elements []Expression
+}
+func (al *ArrayLiteral) expressionNode() {}
+func (al *ArrayLiteral) TokenLiteral() string { return al.Token.Literal }
+func (al *ArrayLiteral) String() string {
+	var out bytes.Buffer
+	elements := []string{}
+	for _, el := range al.Elements {
+		elements = append(elements, el.String())
+	}
+	out.WriteString("[")
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+	return out.String()
+}
+
 type StringLiteral struct {
 	Token token.Token
 	Value string
@@ -193,6 +211,14 @@ type TypeString struct {
 }
 func (ts *TypeString) statementNode() {}
 func (ts *TypeString) TokenLiteral() string { return ts.Token.Literal }
+
+type TypeArray struct {
+	Token token.Token
+	Name *Identifier
+	Value Expression
+}
+func (ta *TypeArray) statementNode() {}
+func (ta *TypeArray) TokenLiteral() string { return ta.Token.Literal }
 // END VARIABLE TYPES
 
 type ExpressionStatement struct {
@@ -294,6 +320,19 @@ func (ts *TypeString) String() string {
 	out.WriteString(" = ")
 	if ts.Value != nil {
 		out.WriteString(ts.Value.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
+func (ta *TypeArray) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(ta.TokenLiteral() + " ")
+	out.WriteString(ta.Name.String())
+	out.WriteString(" = ")
+	if ta.Value != nil {
+		out.WriteString(ta.Value.String())
 	}
 	out.WriteString(";")
 	return out.String()

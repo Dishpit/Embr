@@ -65,6 +65,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.SEMICOLON, p.parseSemicolon)
+	p.registerPrefix(token.STR, p.parseStringLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -81,6 +82,10 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) parseStringLiteral() ast.Expression {
+	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 func (p *Parser) parseSemicolon() ast.Expression {
@@ -147,6 +152,8 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 		returnType = object.VOID_OBJ
 	case token.TYPE_BOOL:
 		returnType = object.BOOLEAN_OBJ
+	case token.TYPE_STRING:
+		returnType = object.STRING_OBJ
 	default:
 		msg := fmt.Sprintf("expected function return type, got %s instead", p.curToken.Type)
 		p.errors = append(p.errors, msg)
@@ -404,6 +411,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.TYPE_INT:
 		return p.parseTypeIntStatement()
+	case token.TYPE_STRING:
+		return p.parseTypeStringStatement()
 	case token.TYPE_BOOL:
 		return p.parseTypeBoolStatement()
 	case token.RETURN:
@@ -482,6 +491,34 @@ func (p *Parser) parseTypeBoolStatement() *ast.TypeBool {
 	}
 
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if stmt.Value == nil {
+		return nil
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) parseTypeStringStatement() *ast.TypeString {
+	stmt := &ast.TypeString{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal }
 
 	if !p.expectPeek(token.ASSIGN) {
 		return nil

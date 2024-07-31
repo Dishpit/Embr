@@ -46,3 +46,11 @@ Returns a new copy of the original array, containing the added value appended on
 ```omega
 push([69, 8675309], "Zaphod Beeblebrox"); // [69, 8675309, Zaphod Beeblebrox]
 ```
+
+## out(x)
+
+Outputs the contents to the terminal. Note that `out` also returns a void object.
+
+```omega
+out("Hello World!") // Hello World\nvoid.
+```

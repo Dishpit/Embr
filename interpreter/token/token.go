@@ -43,6 +43,7 @@ const (
 	RBRACE		= "}"
 	LBRACKET	= "["
 	RBRACKET	= "]"
+	COLON			= ":"
 	FN_RETURN	= "@"
 
 	// keywords

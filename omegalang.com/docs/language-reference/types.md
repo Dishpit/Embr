@@ -8,7 +8,7 @@ Omega has a robust static type system.
 
 In Omega, types are denoted with keywords.
 
-Omega has two versions of each type: the value type, and the return type.
+Omega typically has two versions of each type: the value type, and the return type.
 
 Value types are typically used for things like variables, such as: `int my_var = 42069;`. Return types are a bit different. They're annotated with a `@` after the parameters of a function are declared, like so: `fn my_func(x, y) @int {};`.
 

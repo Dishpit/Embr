@@ -25,6 +25,7 @@ const (
 	OpVoid
 	OpGetGlobal
 	OpSetGlobal
+	OpArray
 )
 
 type Instructions []byte
@@ -55,6 +56,7 @@ var definitions = map[Opcode]*Definition {
 	OpVoid: {"OpVoid", []int{}},
 	OpGetGlobal: {"OpGetGlobal", []int{2}},
 	OpSetGlobal: {"OpSetGlobal", []int{2}},
+	OpArray: {"OpArray", []int{2}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {

@@ -9,6 +9,7 @@ import (
 const (
 	OpConstant Opcode = iota
 	OpAdd
+	OpPop
 )
 
 type Instructions []byte
@@ -23,6 +24,7 @@ type Definition struct {
 var definitions = map[Opcode]*Definition {
 	OpConstant: {"OpConstant", []int{2}},
 	OpAdd: {"OpAdd", []int{}},
+	OpPop: {"OpPop", []int{}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {

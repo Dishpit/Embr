@@ -181,6 +181,13 @@ func (c *Compiler) Compile(node ast.Node) error {
 	return nil
 }
 
+func NewWithState(s *SymbolTable, constants []object.Object) *Compiler {
+	compiler := New()
+	compiler.symbolTable = s
+	compiler.constants = constants
+	return compiler
+}
+
 func (c *Compiler) changeOperand(opPos int, operand int) {
 	op := code.Opcode(c.instructions[opPos])
 	newInstruction := code.Make(op, operand)

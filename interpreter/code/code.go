@@ -8,6 +8,7 @@ import (
 
 const (
 	OpConstant Opcode = iota
+	OpAdd
 )
 
 type Instructions []byte
@@ -21,6 +22,7 @@ type Definition struct {
 
 var definitions = map[Opcode]*Definition {
 	OpConstant: {"OpConstant", []int{2}},
+	OpAdd: {"OpAdd", []int{}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {
@@ -71,6 +73,8 @@ func (ins Instructions) fmtInstruction(def *Definition, operands []int) string {
 	}
 
 	switch operandCount {
+	case 0:
+		return def.Name
 	case 1:
 		return fmt.Sprintf("%s %d", def.Name, operands[0])
 	}

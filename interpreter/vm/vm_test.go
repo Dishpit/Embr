@@ -10,6 +10,15 @@ import (
 	"testing"
 )
 
+func TestGlobalIntStatements(t *testing.T) {
+	tests := []vmTestCase{
+		{"int one = 1; one", 1},
+		{"int one = 1; int two = 2; one + two", 3},
+		{"int one = 1; int two = one + one; one + two", 3},
+	}
+	runVmTests(t, tests)
+}
+
 func TestConditionals(t *testing.T) {
 	tests := []vmTestCase{
 		{"if (true) {10}", 10},

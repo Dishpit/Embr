@@ -10,6 +10,54 @@ import (
 	"fmt"
 )
 
+func TestGlobalIntStatements(t *testing.T) {
+	tests := []compilerTestCase{
+		{
+			input: `
+			int one = 1;
+			int two = 2;
+			`,
+			expectedConstants: []interface{}{1, 2},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpSetGlobal, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpSetGlobal, 1),
+			},
+		},
+		{
+			input: `
+			int one = 1;
+			one;
+			`,
+			expectedConstants: []interface{}{1},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpSetGlobal, 0),
+				code.Make(code.OpGetGlobal, 0),
+				code.Make(code.OpPop),
+			},
+		},
+		{
+			input: `
+			int one = 1;
+			int two = one;
+			two;
+			`,
+			expectedConstants: []interface{}{1},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpSetGlobal, 0),
+				code.Make(code.OpGetGlobal, 0),
+				code.Make(code.OpSetGlobal, 1),
+				code.Make(code.OpGetGlobal, 1),
+				code.Make(code.OpPop),
+			},
+		},
+	}
+	runCompilerTests(t, tests)
+}
+
 type compilerTestCase struct {
 	input string
 	expectedConstants []interface{}

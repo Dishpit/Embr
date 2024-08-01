@@ -10,6 +10,22 @@ import (
 	"testing"
 )
 
+func TestIndexExpressions(t *testing.T) {
+	tests := []vmTestCase{
+		{"[1, 2, 3][1]", 2},
+		{"[1, 2, 3][0 + 2]", 3},
+		{"[[1, 1, 1]][0][0]", 1},
+		{"[][0]", Void},
+		{"[1, 2, 3][99]", Void},
+		{"[1][-1]", Void},
+		{"{1: 1, 2: 2}[1]", 1},
+		{"{1: 1, 2: 2}[2]", 2},
+		{"{1: 1}[0]", Void},
+		{"{}[0]", Void},
+	}
+	runVmTests(t, tests)
+}	
+
 func TestHashLiterals(t *testing.T) {
 	tests := []vmTestCase{
 		{

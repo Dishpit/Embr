@@ -15,6 +15,9 @@ const (
 	OpDiv
 	OpTrue
 	OpFalse
+	OpEqual
+	OpNotEqual
+	OpGreaterThan
 )
 
 type Instructions []byte
@@ -35,6 +38,9 @@ var definitions = map[Opcode]*Definition {
 	OpDiv: {"OpDiv", []int{}},
 	OpTrue: {"OpTrue", []int{}},
 	OpFalse: {"OpFalse", []int{}},
+	OpEqual: {"OpEqual", []int{}},
+	OpNotEqual: {"OpNotEqual", []int{}},
+	OpGreaterThan: {"OpGreaterThan", []int{}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {

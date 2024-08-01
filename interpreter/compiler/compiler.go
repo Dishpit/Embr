@@ -159,6 +159,12 @@ func (c *Compiler) Compile(node ast.Node) error {
 				return err
 			}
 		}
+
+	case *ast.TypeInt:
+		err := c.Compile(node.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

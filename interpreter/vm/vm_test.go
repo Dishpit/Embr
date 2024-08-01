@@ -56,7 +56,7 @@ func testExpectedObject(
 	t.Helper()
 	switch expected := expected.(type) {
 	case int:
-		err := 1Object(int64(expected), actual)
+		err := testIntegerObject(int64(expected), actual)
 		if err != nil {
 			t.Errorf("testIntegerObject failed: %s", err)
 		}

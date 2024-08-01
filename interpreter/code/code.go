@@ -22,6 +22,7 @@ const (
 	OpBang
 	OpJumpNotTruthy
 	OpJump
+	OpVoid
 )
 
 type Instructions []byte
@@ -49,6 +50,7 @@ var definitions = map[Opcode]*Definition {
 	OpBang: {"OpBang", []int{}},
 	OpJumpNotTruthy: {"OpJumpNotTruthy", []int{2}},
 	OpJump: {"OpJump", []int{2}},
+	OpVoid: {"OpVoid", []int{}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {

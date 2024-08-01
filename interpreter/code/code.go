@@ -20,6 +20,8 @@ const (
 	OpGreaterThan
 	OpMinus
 	OpBang
+	OpJumpNotTruthy
+	OpJump
 )
 
 type Instructions []byte
@@ -45,6 +47,8 @@ var definitions = map[Opcode]*Definition {
 	OpGreaterThan: {"OpGreaterThan", []int{}},
 	OpMinus: {"OpMinus", []int{}},
 	OpBang: {"OpBang", []int{}},
+	OpJumpNotTruthy: {"OpJumpNotTruthy", []int{2}},
+	OpJump: {"OpJump", []int{2}},
 }
 
 func ReadOperands(def *Definition, ins Instructions) ([]int, int) {

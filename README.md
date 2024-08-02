@@ -2,6 +2,26 @@
 
 This is the main source code repository for Omega.
 
+## EXPERIMENTAL: HUDSON MOHAWKE
+
+Why Hudson Mohawke?
+
+This experimental branch is all about writing Omega in C.
+
+Because of this variation and the low-level implementation, we're utilizing bytecode and building a virtual machine that runs off of it so we can effectively run Omega on any platform that supports C, which is to say every platform.
+
+C... Byte...
+
+C..Byte..
+
+CByte..
+
+Cbyte
+
+Cbat
+
+Cbat, by Hudson Mohawke
+
 ## About Omega
 
 Omega is (obviously) in its extreme infancy stage; it hasn't even attached to the uterus lining yet. Be advised that everything has the potential to change as time goes on, but I'm planning to prevent any breaking changes as much as possible so I can maintain a singular backwards-compatible spec as opposed to Rust's tendency to break previous versions.

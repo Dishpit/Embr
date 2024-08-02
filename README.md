@@ -22,6 +22,9 @@ Cbat
 
 Cbat, by Hudson Mohawke
 
+## Compiling the Interpreter
+`cl *.c /Fe:omega.exe`
+
 ## About Omega
 
 Omega is (obviously) in its extreme infancy stage; it hasn't even attached to the uterus lining yet. Be advised that everything has the potential to change as time goes on, but I'm planning to prevent any breaking changes as much as possible so I can maintain a singular backwards-compatible spec as opposed to Rust's tendency to break previous versions.

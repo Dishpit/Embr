@@ -1,50 +1,25 @@
 ---
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 # Builtin Functions
 
-As of v0.8.0, Omega has a variety of builtin functions.
+As of v0.10.0, Omega has a couple of builtin functions.
 
-## len(x)
+## clock()
 
-Returns the length of either the string or the array that's passed into it.
+Returns the length of time elapsed since the interpreter has started.
 
 ```omega
-len("Hello, world!"); // 13
-len([1, 2, 3, "Hello, Omega!", 420, 69]); // 6
+out clock();
 ```
 
-## first(x)
+## out
 
-Returns the first element of an array.
-
-```omega
-first([420, 69, 8675309]); // 420
-```
-
-## last(x)
-
-Returns the last element of an array.
+Outputs the evaluation of the remainder of the line into the console.
 
 ```omega
-last([420, 69, 8675309]); // 8675309
-```
-
-## tail(x)
-
-Returns a new copy of the original array, containing everything except for the first element.
-
-```omega
-tail([420, 69, 8675309]); // [69, 8675309]
-```
-
-## push(x, y)
-
-Returns a new copy of the original array, containing the added value appended onto the end.
-
-```omega
-push([69, 8675309], "Zaphod Beeblebrox"); // [69, 8675309, Zaphod Beeblebrox]
+out "Hello, Omega!"; // Hello, Omega!
 ```
 
 ## out(x)

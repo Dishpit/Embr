@@ -6,25 +6,8 @@ sidebar_position: 2
 
 ## Installation
 
-Currently, Omega is interpreted via a REPL built in Go, so you'll need to have Go installed on your machine. Please refer to the [Go download directory](https://go.dev/dl/).
+Currently, Omega is interpreted via a REPL built in C.
 
-After everything is installed, you can clone the Omega repository from GitHub:
+If you'd like to compile the interpreter from source, you're free to do so. In fact, it's encouraged as this will help to determine where Omega can and cannot run.
 
-```bash
-git clone https://github.com/Dishpit/Omega.git
-cd omega
-```
-
-### Your First Omega Program
-
-To get started with Omega, ensure you're inside the interpreter directory.
-
-```bash
-cd interpreter
-```
-
-Once there, simply run the following command to launch the REPL:
-
-```bash
-go run main.go
-```
+That being said, you can also just download a precompiled interpreter and run it.

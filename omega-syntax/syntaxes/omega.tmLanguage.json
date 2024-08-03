@@ -1,0 +1,71 @@
+{
+  "scopeName": "source.omega",
+  "name": "Omega",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#constants"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.omega",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.omega",
+          "match": "\\b(if|else|return|class|var|while|fn|for|out)\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.omega",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\s*(?=\\()"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.omega",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.omega",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.language.boolean.omega",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.null.omega",
+          "match": "\\bnil\\b"
+        }
+      ]
+    }
+  }
+}

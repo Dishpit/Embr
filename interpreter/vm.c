@@ -33,8 +33,8 @@ static void runtimeError(const char* format, ...) {
     CallFrame* frame = &vm.frames[i];
     ObjFunction* function = frame->closure->function;
     size_t instruction = frame->ip - function->chunk.code - 1;
-    fprintf(stderr, "[line %d] in ",
-            function->chunk.lines[instruction]);
+    int line = getLine(&function->chunk, instruction);
+    fprintf(stderr, "[line %d] in ", line);
     if (function->name == NULL) {
       fprintf(stderr, "script\n");
     } else {
@@ -284,6 +284,9 @@ static InterpretResult run() {
   #define READ_CONSTANT() \
     (frame->closure->function->chunk.constants.values[READ_BYTE()])
 
+  #define READ_CONSTANT_LONG() \
+    (frame->closure->function->chunk.constants.values[READ_SHORT()])
+
   #define READ_STRING() AS_STRING(READ_CONSTANT())
   #define BINARY_OP(valueType, op) \
     do { \
@@ -312,6 +315,11 @@ static InterpretResult run() {
     switch (instruction = READ_BYTE()) {
       case OP_CONSTANT: {
         Value constant = READ_CONSTANT();
+        push(constant);
+        break;
+      }
+      case OP_CONSTANT_LONG: {
+        Value constant = READ_CONSTANT_LONG();
         push(constant);
         break;
       }

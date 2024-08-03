@@ -640,7 +640,7 @@ static void block() {
 }
 
 static FunctionReturnType parseReturnType() {
-  consume(TOKEN_AT, "Expect '@' before return type.");
+  if (match(TOKEN_AT)) {
   if (match(TOKEN_IDENTIFIER)) {
     if (parser.previous.length == 4 && memcmp(parser.previous.start, "void", 4) == 0) return TYPE_VOID;
     if (parser.previous.length == 3 && memcmp(parser.previous.start, "int", 3) == 0) return TYPE_INT;
@@ -649,7 +649,8 @@ static FunctionReturnType parseReturnType() {
     if (parser.previous.length == 4 && memcmp(parser.previous.start, "bool", 4) == 0) return TYPE_BOOL;
   }
   error("Invalid return type.");
-  return TYPE_VOID;
+  }
+  return TYPE_NONE;
 }
 
 static void function(FunctionType type) {
@@ -676,12 +677,13 @@ static void function(FunctionType type) {
   consume(TOKEN_LEFT_BRACE, "Expect '{' before function body.");
   block();
 
-  // check if the function has an explicity return
+  // if the function doesn't explicitly return and has no specified return type,
+  // emit an implicit return
   if (current->function->chunk.code[current->function->chunk.count - 1] != OP_RETURN) {
-    if (returnType != TYPE_VOID) {
-      error("Function must have an explicit return.");
-    } else {
+    if (returnType == TYPE_VOID || returnType == TYPE_NONE) {
       emitReturn();
+    } else {
+      error("Function must have an explicit return.");
     }
   }
 
@@ -893,6 +895,9 @@ static void returnStatement() {
         break;
       case TYPE_VOID:
         // this case is handled above
+        break;
+      case TYPE_NONE:
+        // no type checking required for TYPE_NONE
         break;
     }
     

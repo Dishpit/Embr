@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 typedef enum {
+  TYPE_NONE, // in case theres no return type specified
   TYPE_VOID,
   TYPE_INT,
   TYPE_FLOAT,

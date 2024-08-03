@@ -639,6 +639,19 @@ static void block() {
   consume(TOKEN_RIGHT_BRACE, "Expect '}' after block.");
 }
 
+static FunctionReturnType parseReturnType() {
+  consume(TOKEN_AT, "Expect '@' before return type.");
+  if (match(TOKEN_IDENTIFIER)) {
+    if (parser.previous.length == 4 && memcmp(parser.previous.start, "void", 4) == 0) return TYPE_VOID;
+    if (parser.previous.length == 3 && memcmp(parser.previous.start, "int", 3) == 0) return TYPE_INT;
+    if (parser.previous.length == 5 && memcmp(parser.previous.start, "float", 5) == 0) return TYPE_FLOAT;
+    if (parser.previous.length == 6 && memcmp(parser.previous.start, "string", 6) == 0) return TYPE_STRING;
+    if (parser.previous.length == 4 && memcmp(parser.previous.start, "bool", 4) == 0) return TYPE_BOOL;
+  }
+  error("Invalid return type.");
+  return TYPE_VOID;
+}
+
 static void function(FunctionType type) {
   Compiler compiler;
   initCompiler(&compiler, type);
@@ -656,8 +669,21 @@ static void function(FunctionType type) {
     } while (match(TOKEN_COMMA));
   }
   consume(TOKEN_RIGHT_PAREN, "Expect ')' after parameters.");
+
+  FunctionReturnType returnType = parseReturnType();
+  current->function->returnType = returnType;
+
   consume(TOKEN_LEFT_BRACE, "Expect '{' before function body.");
   block();
+
+  // check if the function has an explicity return
+  if (current->function->chunk.code[current->function->chunk.count - 1] != OP_RETURN) {
+    if (returnType != TYPE_VOID) {
+      error("Function must have an explicit return.");
+    } else {
+      emitReturn();
+    }
+  }
 
   ObjFunction* function = endCompiler();
   emitBytes(OP_CLOSURE, makeConstant(OBJ_VAL(function)));
@@ -827,15 +853,49 @@ static void returnStatement() {
   if (current->type == TYPE_SCRIPT) {
     error("Can't return from top-level code.");
   }
+
   if (match(TOKEN_SEMICOLON)) {
+    if (current->function->returnType != TYPE_VOID) {
+      error("Function must return a value.");
+    }
     emitReturn();
   } else {
-    if (current->type == TYPE_INITIALIZER) {
-      error("Can't return a value from an initializer.");
+    if (current->function->returnType == TYPE_VOID) {
+      error("Void function cannot return a value.");
     }
 
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+    
+    // instead of checking the actual value, we'll do a basic type check based on the last emitted opcode
+    uint8_t lastOpcode = current->function->chunk.code[current->function->chunk.count - 1];
+    
+    switch (current->function->returnType) {
+      case TYPE_INT:
+      case TYPE_FLOAT:
+        if (lastOpcode != OP_CONSTANT && lastOpcode != OP_ADD && 
+            lastOpcode != OP_SUBTRACT && lastOpcode != OP_MULTIPLY && 
+            lastOpcode != OP_DIVIDE && lastOpcode != OP_NEGATE) {
+          error("Function must return a number.");
+        }
+        break;
+      case TYPE_STRING:
+        if (lastOpcode != OP_CONSTANT) {  // assuming strings are always constants
+          error("Function must return a string.");
+        }
+        break;
+      case TYPE_BOOL:
+        if (lastOpcode != OP_TRUE && lastOpcode != OP_FALSE && 
+            lastOpcode != OP_EQUAL && lastOpcode != OP_GREATER && 
+            lastOpcode != OP_LESS && lastOpcode != OP_NOT) {
+          error("Function must return a boolean.");
+        }
+        break;
+      case TYPE_VOID:
+        // this case is handled above
+        break;
+    }
+    
     emitByte(OP_RETURN);
   }
 }

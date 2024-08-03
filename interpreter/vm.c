@@ -112,6 +112,21 @@ static bool call(ObjClosure* closure, int argCount) {
   return true;
 }
 
+static bool checkReturnType(ObjFunction* function, Value returnValue) {
+  switch (function->returnType) {
+    case TYPE_VOID:
+      return IS_NIL(returnValue);
+    case TYPE_INT:
+    case TYPE_FLOAT:
+      return IS_NUMBER(returnValue);
+    case TYPE_STRING:
+      return IS_STRING(returnValue);
+    case TYPE_BOOL:
+      return IS_BOOL(returnValue);
+  }
+  return false;
+}
+
 static bool callValue(Value callee, int argCount) {
   if (IS_OBJ(callee)) {
     switch (OBJ_TYPE(callee)) {
@@ -499,6 +514,11 @@ static InterpretResult run() {
         if (vm.frameCount == 0) {
           pop();
           return INTERPRET_OK;
+        }
+
+        if (!checkReturnType(frame->closure->function, result)) {
+          runtimeError("Invalid return type.");
+          return INTERPRET_RUNTIME_ERROR;
         }
 
         vm.stackTop = frame->slots;

@@ -3,7 +3,12 @@
 This is the main source code repository for Omega.
 
 ## Compiling the Interpreter
+
+Quick and easy compilation:
 `cl *.c /Fe:omega.exe`
+
+Full compilation and deployment to production:
+`cl *.c /Fe:omega.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
 
 ## About Omega
 

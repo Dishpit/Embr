@@ -184,7 +184,7 @@ static uint8_t makeConstant(Value value) {
 }
 
 static void emitConstant(Value value) {
-  emitBytes(OP_CONSTANT, makeConstant(value));
+  writeConstant(currentChunk(), value, parser.previous.line);
 }
 
 static void patchJump(int offset) {

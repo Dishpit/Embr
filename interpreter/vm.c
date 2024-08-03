@@ -284,6 +284,9 @@ static InterpretResult run() {
   #define READ_CONSTANT() \
     (frame->closure->function->chunk.constants.values[READ_BYTE()])
 
+  #define READ_CONSTANT_LONG() \
+    (frame->closure->function->chunk.constants.values[READ_SHORT()])
+
   #define READ_STRING() AS_STRING(READ_CONSTANT())
   #define BINARY_OP(valueType, op) \
     do { \
@@ -312,6 +315,11 @@ static InterpretResult run() {
     switch (instruction = READ_BYTE()) {
       case OP_CONSTANT: {
         Value constant = READ_CONSTANT();
+        push(constant);
+        break;
+      }
+      case OP_CONSTANT_LONG: {
+        Value constant = READ_CONSTANT_LONG();
         push(constant);
         break;
       }

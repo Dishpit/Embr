@@ -114,6 +114,8 @@ static bool call(ObjClosure* closure, int argCount) {
 
 static bool checkReturnType(ObjFunction* function, Value returnValue) {
   switch (function->returnType) {
+    case TYPE_NONE:
+      return true; // no return type specified, any value is allowed
     case TYPE_VOID:
       return IS_NIL(returnValue);
     case TYPE_INT:
@@ -516,7 +518,9 @@ static InterpretResult run() {
           return INTERPRET_OK;
         }
 
-        if (!checkReturnType(frame->closure->function, result)) {
+        // only check return type if one is specified
+        if (frame->closure->function->returnType != TYPE_NONE &&
+            !checkReturnType(frame->closure->function, result)) {
           runtimeError("Invalid return type.");
           return INTERPRET_RUNTIME_ERROR;
         }

@@ -1,14 +1,18 @@
 // BEFORE OPTIMIZATION
 // 29.262s
-// 1e+08
 //
-// OPTIMIZED - NO NAN BOXING
-// 27.58s
-// 1e+08
+// OPTIMIZED - NO NAN BOXING (debug build)
+// 27.583s
 //
-// OPTIMIZED - WITH NAN BOXING
-// 24.055
-// 1e+08
+// OPTIMIZED - WITH NAN BOXING (debug build)
+// 24.055s
+//
+// OPTIMIZED - NO NAN BOXING (release build)
+// 10.902s
+//
+// OPTIMIZED - WITH NAN BOXING (release build)
+// 7.096s
+//
 
 class Zoo {
   init() {
@@ -19,18 +23,18 @@ class Zoo {
     this.elephant = 1;
     this.fox      = 1;
   }
-  ant()    { return this.aardvark; }
-  banana() { return this.baboon; }
-  tuna()   { return this.cat; }
-  hay()    { return this.donkey; }
-  grass()  { return this.elephant; }
-  mouse()  { return this.fox; }
+  ant()     { return this.aardvark; }
+  banana()  { return this.baboon; }
+  tuna()    { return this.cat; }
+  hay()     { return this.donkey; }
+  grass()   { return this.elephant; }
+  mouse()   { return this.fox; }
 }
 
 var zoo = Zoo();
 var sum = 0;
 var start = clock();
-while (sum < 100000000) {
+while (sum < 1000000000) {
   sum = sum + zoo.ant()
             + zoo.banana()
             + zoo.tuna()
@@ -39,6 +43,5 @@ while (sum < 100000000) {
             + zoo.mouse();
 }
 
-// out "AFTER OPTIMIZATIONS: WITH NAN BOXING";
 out clock() - start;
 out sum;

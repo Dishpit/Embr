@@ -20,8 +20,7 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
   return offset + 2;
 }
 
-static int invokeInstruction(const char* name, Chunk* chunk,
-                                int offset) {
+static int invokeInstruction(const char* name, Chunk* chunk, int offset) {
   uint8_t constant = chunk->code[offset + 1];
   uint8_t argCount = chunk->code[offset + 2];
   printf("%-16s (%d args) %4d '", name, argCount, constant);
@@ -32,11 +31,11 @@ static int invokeInstruction(const char* name, Chunk* chunk,
 
 int disassembleInstruction(Chunk* chunk, int offset) {
   printf("%04d ", offset);
-  if (offset > 0 &&
-      chunk->lines[offset] == chunk->lines[offset - 1]) {
+  int line = getLine(chunk, offset);
+  if (offset > 0 && line == getLine(chunk, offset - 1)) {
     printf("   | ");
   } else {
-    printf("%4d ", chunk->lines[offset]);
+    printf("%4d ", line);
   }
 
   uint8_t instruction = chunk->code[offset];
@@ -58,8 +57,7 @@ int disassembleInstruction(Chunk* chunk, int offset) {
     case OP_GET_GLOBAL:
       return constantInstruction("OP_GET_GLOBAL", chunk, offset);
     case OP_DEFINE_GLOBAL:
-      return constantInstruction("OP_DEFINE_GLOBAL", chunk,
-                                  offset);
+      return constantInstruction("OP_DEFINE_GLOBAL", chunk, offset);
     case OP_SET_GLOBAL:
       return constantInstruction("OP_SET_GLOBAL", chunk, offset);
     case OP_GET_UPVALUE:
@@ -143,15 +141,13 @@ static int simpleInstruction(const char* name, int offset) {
   return offset + 1;
 }
 
-static int byteInstruction(const char* name, Chunk* chunk,
-                            int offset) {
+static int byteInstruction(const char* name, Chunk* chunk, int offset) {
   uint8_t slot = chunk->code[offset + 1];
   printf("%-16s %4d\n", name, slot);
   return offset + 2;
 }
 
-static int jumpInstruction(const char* name, int sign,
-                            Chunk* chunk, int offset) {
+static int jumpInstruction(const char* name, int sign, Chunk* chunk, int offset) {
   uint16_t jump = (uint16_t)(chunk->code[offset + 1] << 8);
   jump |= chunk->code[offset + 2];
   printf("%-16s %4d -> %d\n", name, offset,

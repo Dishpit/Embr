@@ -51,6 +51,13 @@ static char* readFile(const char* path) {
 }
 
 static void runFile(const char* path) {
+  // restrict files to those that contain a .o extension
+  const char* extension = strrchr(path, '.');
+  if (extension == NULL || strcmp(extension, ".o") != 0) {
+    fprintf(stderr, "Error: File must be an Omega code file (.o extension).\n");
+    exit(74);
+  }
+  
   char* source = readFile(path);
   InterpretResult result = interpret(source);
   free(source);

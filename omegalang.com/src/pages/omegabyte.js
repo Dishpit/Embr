@@ -2,28 +2,18 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import OmegaByte2024Info from '@site/src/components/OmegaByte2024';
 
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
+import OmegaByte2024 from '../../static/img/omegabyte-2024-02.png'
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="https://github.com/Dishpit/Omega">
-            Check Out Omega! 💻
-          </Link>
-        </div>
-        <p>Current version: v0.10.0</p>
+        <img src={OmegaByte2024} />
       </div>
     </header>
   );
@@ -37,7 +27,7 @@ export default function Home() {
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>
-        <HomepageFeatures />
+        <OmegaByte2024Info />
       </main>
     </Layout>
   );

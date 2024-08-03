@@ -37,9 +37,9 @@ Here is a simple example of a function in Omega:
 ```omega
 fn add_ints(x, y) @int {
   return x + y;
-};
+}
 
 fn main() @void {
-  add_ints(420, 69);
-};
+  out add_ints(420, 69);
+}
 ```

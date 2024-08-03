@@ -645,7 +645,7 @@ static FunctionReturnType parseReturnType() {
     if (parser.previous.length == 4 && memcmp(parser.previous.start, "void", 4) == 0) return TYPE_VOID;
     if (parser.previous.length == 3 && memcmp(parser.previous.start, "int", 3) == 0) return TYPE_INT;
     if (parser.previous.length == 5 && memcmp(parser.previous.start, "float", 5) == 0) return TYPE_FLOAT;
-    if (parser.previous.length == 6 && memcmp(parser.previous.start, "string", 6) == 0) return TYPE_STRING;
+    if (parser.previous.length == 3 && memcmp(parser.previous.start, "str", 3) == 0) return TYPE_STRING;
     if (parser.previous.length == 4 && memcmp(parser.previous.start, "bool", 4) == 0) return TYPE_BOOL;
   }
   error("Invalid return type.");

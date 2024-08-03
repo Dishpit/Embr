@@ -53,10 +53,10 @@ Separate items and statements by either zero or one blank lines.
 
 ```omega
 fn foo() @int {
-  int x = ...;
+  var x = ...;
 
-  int y = ...;
-  int z = ...;
+  var y = ...;
+  var z = ...;
 };
 
 fn bar() {};

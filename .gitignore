@@ -1,2 +1,36 @@
+# Exclude object files and executables
 *.obj
 *.exe
+
+# Node.js dependencies
+node_modules/
+package-lock.json
+
+# TypeScript build outputs
+out/
+dist/
+
+# VS Code test outputs
+.vscode-test/
+
+# VS Code workspace settings
+.vscode/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Optional npm cache directory
+.npm/
+
+# Coverage directories
+coverage/
+*.cover
+*.lcov
+*.lcov-report
+
+# OS generated files
+.DS_Store
+Thumbs.db

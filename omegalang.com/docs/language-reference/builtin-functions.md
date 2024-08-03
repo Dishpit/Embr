@@ -21,3 +21,11 @@ Outputs the evaluation of the remainder of the line into the console.
 ```omega
 out "Hello, Omega!"; // Hello, Omega!
 ```
+
+## out(x)
+
+Outputs the contents to the terminal. Note that `out` also returns a void object.
+
+```omega
+out("Hello World!") // Hello World\nvoid.
+```

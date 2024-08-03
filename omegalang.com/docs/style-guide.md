@@ -59,6 +59,6 @@ fn foo() @int {
   var z = ...;
 };
 
-fn bar() {};
-fn baz() {};
+fn bar() @void {};
+fn baz() @void {};
 ```

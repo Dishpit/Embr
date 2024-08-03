@@ -1,9 +1,5 @@
 # Change Log
 
-All notable changes to the "omega-syntax" extension will be documented in this file.
+## [v0.10.2]
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- Initial release with basic syntax highlighting for Omega. This is kept in line with the current Omega version.

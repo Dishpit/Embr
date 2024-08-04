@@ -1,0 +1,7 @@
+class Math {
+  double(x) {
+    return x * 2;
+  }
+}
+
+var Math = Math();

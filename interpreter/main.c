@@ -74,21 +74,15 @@ void loadStandardLibrary() {
   char filePath[256];
   snprintf(filePath, sizeof(filePath), "%s%s", stlPath, mathFile);
 
-  printf("Attempting to open standard library file: %s\n", filePath);
-
   FILE *file = fopen(filePath, "r");  // Open as a text file
   if (!file) {
     fprintf(stderr, "Failed to open standard library file: %s\n", filePath);
     return;
   }
 
-  printf("File opened successfully: %s\n", filePath);
-
   fseek(file, 0, SEEK_END);
   size_t fileSize = ftell(file);
   fseek(file, 0, SEEK_SET);
-
-  printf("File size: %zu bytes\n", fileSize);
 
   char *source = (char *)malloc(fileSize + 1);
   if (!source) {
@@ -109,8 +103,6 @@ void loadStandardLibrary() {
   source[index] = '\0';
 
   fclose(file);
-  
-  printf("Loaded standard library source:\n%s\n", source);
 
   InterpretResult result = interpret(source);
   free(source);

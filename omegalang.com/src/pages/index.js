@@ -33,8 +33,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title} | The General Purpose Programming`}
-      description="Description will go into a meta tag in <head />">
+      title={`${siteConfig.title}`}
+      description="The General Purpose Programming Language">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

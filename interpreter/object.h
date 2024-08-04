@@ -35,6 +35,7 @@ typedef enum {
   OBJ_NATIVE,
   OBJ_STRING,
   OBJ_UPVALUE,
+  OBJ_ARRAY,
 } ObjType;
 
 struct Obj {
@@ -98,8 +99,13 @@ typedef struct {
   ObjClosure* method;
 } ObjBoundMethod;
 
-ObjBoundMethod* newBoundMethod(Value receiver,
-                              ObjClosure* method);
+typedef struct {
+  Obj obj;
+  ValueArray elements;
+} ObjArray;
+
+ObjArray* newArray();
+ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method);
 ObjClass* newClass(ObjString* name);
 ObjClosure* newClosure(ObjFunction* function);
 ObjFunction* newFunction();
@@ -109,6 +115,9 @@ ObjString* takeString(char* chars, int length);
 ObjString* copyString(const char* chars, int length);
 ObjUpvalue* newUpvalue(Value* slot);
 void printObject(Value value);
+void writeArray(ObjArray* array, Value value);
+void printArray(ObjArray* array);
+Value readArray(ObjArray* array, int index);
 
 static inline bool isObjType(Value value, ObjType type) {
   return IS_OBJ(value) && AS_OBJ(value)->type == type;

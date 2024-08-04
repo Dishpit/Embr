@@ -557,6 +557,43 @@ static InterpretResult run() {
       case OP_METHOD:
         defineMethod(READ_STRING());
         break;
+      case OP_ARRAY: {
+        int elementCount = READ_BYTE();
+        ObjArray* array = newArray();
+        for (int i = 0; i < elementCount; i++) {
+          writeArray(array, peek(elementCount - i - 1));
+        }
+        for (int i = 0; i < elementCount; i++) {
+          pop();
+        }
+        push(ARRAY_VAL(array));
+        break;
+      }
+      case OP_ARRAY_GET: {
+        if (!IS_ARRAY(peek(1)) || !IS_NUMBER(peek(0))) {
+          runtimeError("Array access requires an array and a number.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        int index = AS_NUMBER(pop());
+        ObjArray* array = AS_ARRAY(pop());
+        push(readArray(array, index));
+        break;
+      }
+      case OP_ARRAY_SET: {
+        if (!IS_ARRAY(peek(2)) || !IS_NUMBER(peek(1))) {
+          runtimeError("Array access requires an array and a number.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        Value value = peek(0);
+        int index = AS_NUMBER(peek(1));
+        ObjArray* array = AS_ARRAY(peek(2));
+        array->elements.values[index] = value;
+        pop();
+        pop();
+        pop();
+        push(NIL_VAL);
+        break;
+      }
     }
   }
 

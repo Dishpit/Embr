@@ -123,6 +123,34 @@ ObjString* copyString(const char* chars, int length) {
   return allocateString(heapChars, length, hash);
 }
 
+ObjArray* newArray() {
+  ObjArray* array = ALLOCATE_OBJ(ObjArray, OBJ_ARRAY);
+  initValueArray(&array->elements);
+  return array;
+}
+
+void writeArray(ObjArray* array, Value value) {
+  writeValueArray(&array->elements, value);
+}
+
+Value readArray(ObjArray* array, int index) {
+  if (index >= 0 && index < array->elements.count) {
+    return array->elements.values[index];
+  }
+  return NIL_VAL;
+}
+
+void printArray(ObjArray* array) {
+  printf("[");
+  for (int i = 0; i < array->elements.count; i++) {
+    printValue(array->elements.values[i]);
+    if (i < array->elements.count - 1) {
+      printf(", ");
+    }
+  }
+  printf("]");
+}
+
 ObjUpvalue* newUpvalue(Value* slot) {
   ObjUpvalue* upvalue = ALLOCATE_OBJ(ObjUpvalue, OBJ_UPVALUE);
   upvalue->closed = NIL_VAL;
@@ -165,6 +193,9 @@ void printObject(Value value) {
       break;
     case OBJ_UPVALUE:
       printf("upvalue");
+      break;
+    case OBJ_ARRAY:
+      printArray(AS_ARRAY(value));
       break;
   }
 }

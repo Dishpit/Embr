@@ -17,7 +17,7 @@ This extension provides syntax highlighting for the Omega programming language.
 
 ## Release Notes
 
-### [v0.2.0]
+### [v0.11.0]
 
 - Add support for .omg file extension.
 

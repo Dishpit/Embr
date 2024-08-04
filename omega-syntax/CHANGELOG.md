@@ -1,6 +1,6 @@
 # Change Log
 
-## [v0.2.0]
+## [v0.11.0]
 
 - Add support for .omg file extension.
 

@@ -72,6 +72,11 @@ static void blackenObject(Obj* object) {
   #endif
 
   switch (object->type) {
+    case OBJ_ARRAY: {
+      ObjArray* array = (ObjArray*)object;
+      markArray(&array->elements);
+      break;
+    }
     case OBJ_BOUND_METHOD: {
       ObjBoundMethod* bound = (ObjBoundMethod*)object;
       markValue(bound->receiver);
@@ -119,6 +124,12 @@ static void freeObject(Obj* object) {
   #endif
 
   switch (object->type) {
+    case OBJ_ARRAY: {
+      ObjArray* array = (ObjArray*)object;
+      freeValueArray(&array->elements);
+      FREE(ObjArray, object);
+      break;
+    }
     case OBJ_BOUND_METHOD:
       FREE(ObjBoundMethod, object);
       break;

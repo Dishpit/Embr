@@ -12,6 +12,7 @@ typedef enum {
   TYPE_FLOAT,
   TYPE_STRING,
   TYPE_BOOL,
+  TYPE_ARRAY,
 } FunctionReturnType;
 
 // DEV FLAGS

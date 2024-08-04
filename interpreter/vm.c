@@ -8,13 +8,115 @@
 #include "debug.h"
 #include "object.h"
 #include "memory.h"
+#include "value.h"
 #include "vm.h"
 
 VM vm;
 
+static Value arrayPrepend(int argCount, Value* args);
+static Value arrayAppend(int argCount, Value* args);
+static Value arrayHead(int argCount, Value* args);
+static Value arrayTail(int argCount, Value* args);
+static Value arrayRest(int argCount, Value* args);
 static Value clockNative(int argCount, Value* args) {
   return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
+
+static Value arrayPrepend(int argCount, Value* args) {
+  if (argCount != 2 || !IS_ARRAY(args[0])) {
+    runtimeError("prepend() takes exactly 2 arguments: array and value.");
+    return NIL_VAL;
+  }
+
+  ObjArray* array = AS_ARRAY(args[0]);
+  Value value = args[1];
+
+  // shift elements to the right
+  writeArray(array, NIL_VAL); // add a new slot at the end
+  for (int i = array->elements.count - 1; i > 0; i--) {
+    array->elements.values[i] = array->elements.values[i - 1];
+  }
+  array->elements.values[0] = value;
+
+  return NIL_VAL;
+}
+
+static Value arrayAppend(int argCount, Value* args) {
+  if (argCount != 2 || !IS_ARRAY(args[0])) {
+    runtimeError("append() takes exactly 2 arguments: array and value.");
+    return NIL_VAL;
+  }
+
+  ObjArray* array = AS_ARRAY(args[0]);
+  Value value = args[1];
+
+  writeArray(array, value);
+
+  return NIL_VAL;
+}
+
+static Value arrayHead(int argCount, Value* args) {
+  if (argCount != 1 || !IS_ARRAY(args[0])) {
+    runtimeError("head() takes exactly 1 argument: array.");
+    return NIL_VAL;
+  }
+
+  ObjArray* array = AS_ARRAY(args[0]);
+
+  if (array->elements.count == 0) {
+    runtimeError("head() called on an empty array.");
+    return NIL_VAL;
+  }
+
+  Value value = array->elements.values[0];
+  // shift elements to the left
+  for (int i = 0; i < array->elements.count - 1; i++) {
+    array->elements.values[i] = array->elements.values[i + 1];
+  }
+  array->elements.count--;
+
+  return value;
+}
+
+static Value arrayTail(int argCount, Value* args) {
+  if (argCount != 1 || !IS_ARRAY(args[0])) {
+    runtimeError("tail() takes exactly 1 argument: array.");
+    return NIL_VAL;
+  }
+
+  ObjArray* array = AS_ARRAY(args[0]);
+
+  if (array->elements.count == 0) {
+    runtimeError("tail() called on an empty array.");
+    return NIL_VAL;
+  }
+
+  Value value = array->elements.values[array->elements.count - 1];
+  array->elements.count--;
+
+  return value;
+}
+
+static Value arrayRest(int argCount, Value* args) {
+  if (argCount != 1 || !IS_ARRAY(args[0])) {
+    runtimeError("rest() takes exactly 1 argument: array.");
+    return NIL_VAL;
+  }
+
+  ObjArray* array = AS_ARRAY(args[0]);
+  if (array->elements.count == 0) {
+    runtimeError("rest() called on an empty array.");
+    return NIL_VAL;
+  }
+
+  ObjArray* anewArray = newArray();
+  for (int i = 1; i < array->elements.count; i++) {
+    writeArray(anewArray, array->elements.values[i]);
+  }
+
+  return ARRAY_VAL(anewArray);
+}
+
 
 static void resetStack() {
   vm.stackTop = vm.stack;
@@ -70,6 +172,11 @@ void initVM() {
   vm.initString = copyString("init", 4);
 
   defineNative("clock", clockNative);
+  defineNative("prepend", arrayPrepend);
+  defineNative("append", arrayAppend);
+  defineNative("head", arrayHead);
+  defineNative("tail", arrayTail);
+  defineNative("rest", arrayRest);
 }
 
 void freeVM() {
@@ -557,6 +664,43 @@ static InterpretResult run() {
       case OP_METHOD:
         defineMethod(READ_STRING());
         break;
+      case OP_ARRAY: {
+        int elementCount = READ_BYTE();
+        ObjArray* array = newArray();
+        for (int i = 0; i < elementCount; i++) {
+          writeArray(array, peek(elementCount - i - 1));
+        }
+        for (int i = 0; i < elementCount; i++) {
+          pop();
+        }
+        push(ARRAY_VAL(array));
+        break;
+      }
+      case OP_ARRAY_GET: {
+        if (!IS_ARRAY(peek(1)) || !IS_NUMBER(peek(0))) {
+          runtimeError("Array access requires an array and a number.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        int index = AS_NUMBER(pop());
+        ObjArray* array = AS_ARRAY(pop());
+        push(readArray(array, index));
+        break;
+      }
+      case OP_ARRAY_SET: {
+        if (!IS_ARRAY(peek(2)) || !IS_NUMBER(peek(1))) {
+          runtimeError("Array access requires an array and a number.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        Value value = peek(0);
+        int index = AS_NUMBER(peek(1));
+        ObjArray* array = AS_ARRAY(peek(2));
+        array->elements.values[index] = value;
+        pop();
+        pop();
+        pop();
+        push(NIL_VAL);
+        break;
+      }
     }
   }
 

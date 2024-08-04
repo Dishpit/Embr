@@ -194,5 +194,8 @@ void printObject(Value value) {
     case OBJ_UPVALUE:
       printf("upvalue");
       break;
+    case OBJ_ARRAY:
+      printArray(AS_ARRAY(value));
+      break;
   }
 }

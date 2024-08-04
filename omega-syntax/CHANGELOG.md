@@ -1,5 +1,9 @@
 # Change Log
 
-## [v0.10.4]
+## [v0.2.0]
 
-- Initial release with basic syntax highlighting for Omega. This is kept in line with the current Omega version.
+- Add support for .omg file extension.
+
+## [v0.1.0]
+
+- Initial release with basic syntax highlighting for Omega.

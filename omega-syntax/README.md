@@ -4,7 +4,7 @@ This extension provides syntax highlighting for the Omega programming language.
 
 ## Features
 
-- Syntax highlighting for Omega `.o` files.
+- Syntax highlighting for Omega `.omg` files.
 - Support for keywords, functions, variables, classes, and more.
 
 ## Requirements
@@ -17,9 +17,9 @@ This extension provides syntax highlighting for the Omega programming language.
 
 ## Release Notes
 
-### 0.10.2
+### [v0.2.0]
 
-- Initial release with basic syntax highlighting for Omega. This is kept in line with the current Omega version.
+- Add support for .omg file extension.
 
 ## More Information
 

@@ -2,7 +2,7 @@
   "name": "omega-syntax",
   "displayName": "Omega Syntax",
   "description": "Syntax highlighting for the Omega programming language",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "publisher": "Dishpit",
   "engines": {
     "vscode": "^1.92.0"
@@ -15,7 +15,7 @@
       {
         "id": "omega",
         "aliases": ["Omega", "omega"],
-        "extensions": [".o"],
+        "extensions": [".omg"],
         "configuration": "./language-configuration.json"
       }
     ],

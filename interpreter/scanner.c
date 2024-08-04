@@ -170,7 +170,9 @@ static Token number() {
 }
 
 static Token string() {
-  while (peek() != '"' && !isAtEnd()) {
+  char quote = scanner.start[0]; // gets the starting quote type
+
+  while (peek() != quote && !isAtEnd()) {
     if (peek() == '\n') scanner.line++;
     advance();
   }
@@ -219,7 +221,10 @@ Token scanToken() {
     case '>':
       return makeToken(
         match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
-    case '"': return string();
+    case '"':
+    case '\'':
+    case '`':
+      return string();
   }
 
   return errorToken("Unexpected character.");

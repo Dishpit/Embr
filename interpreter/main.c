@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "compiler.h"
+#include "memory.h"
 #include "common.h"
 #include "chunk.h"
 #include "debug.h"
+#include "object.h"
 #include "vm.h"
 
 static void repl() {
@@ -66,8 +68,55 @@ static void runFile(const char* path) {
   if (result == INTERPRET_RUNTIME_ERROR) exit(70);
 }
 
+void loadStandardLibrary() {
+  const char *stlPath = "./stl/";
+  const char *mathFile = "math.omg";
+  char filePath[256];
+  snprintf(filePath, sizeof(filePath), "%s%s", stlPath, mathFile);
+
+  FILE *file = fopen(filePath, "r");  // Open as a text file
+  if (!file) {
+    fprintf(stderr, "Failed to open standard library file: %s\n", filePath);
+    return;
+  }
+
+  fseek(file, 0, SEEK_END);
+  size_t fileSize = ftell(file);
+  fseek(file, 0, SEEK_SET);
+
+  char *source = (char *)malloc(fileSize + 1);
+  if (!source) {
+    fprintf(stderr, "Failed to allocate memory for standard library.\n");
+    fclose(file);
+    return;
+  }
+
+  size_t index = 0;
+  int c;
+  while ((c = fgetc(file)) != EOF) {
+    if (c == '\n' || c == '\r') {
+      source[index++] = ' ';
+    } else {
+      source[index++] = (char)c;
+    }
+  }
+  source[index] = '\0';
+
+  fclose(file);
+
+  InterpretResult result = interpret(source);
+  free(source);
+
+  if (result == INTERPRET_COMPILE_ERROR) exit(65);
+  if (result == INTERPRET_RUNTIME_ERROR) exit(70);
+}
+
+
+
 int main(int argc, const char* argv[]) {
   initVM();
+
+  loadStandardLibrary();
 
   if (argc == 1) {
     repl();

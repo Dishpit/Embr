@@ -18,6 +18,23 @@ static Value arrayAppend(int argCount, Value* args);
 static Value arrayHead(int argCount, Value* args);
 static Value arrayTail(int argCount, Value* args);
 static Value arrayRest(int argCount, Value* args);
+static Value lengthNative(int argCount, Value* args) {
+  if (argCount != 1) {
+    runtimeError("length() takes exactly 1 argument.");
+    return NIL_VAL;
+  }
+
+  if (IS_STRING(args[0])) {
+    ObjString* string = AS_STRING(args[0]);
+    return NUMBER_VAL((double)string->length);
+  } else if (IS_ARRAY(args[0])) {
+    ObjArray* array = AS_ARRAY(args[0]);
+    return NUMBER_VAL((double)array->elements.count);
+  } else {
+    runtimeError("Argument to length() must be a string or an array.");
+    return NIL_VAL;
+  }
+}
 static Value clockNative(int argCount, Value* args) {
   return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
@@ -177,6 +194,7 @@ void initVM() {
   defineNative("head", arrayHead);
   defineNative("tail", arrayTail);
   defineNative("rest", arrayRest);
+  defineNative("length", lengthNative);
 }
 
 void freeVM() {

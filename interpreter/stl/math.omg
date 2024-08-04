@@ -1,6 +1,24 @@
 class Math {
-  double(x) {
-    return x * 2;
+  power(base, exponent) {
+    var result = 1;
+    for (var i = 0; i < exponent; i = i + 1) {
+      result = result * base;
+    }
+    return result;
+  }
+
+  sqrt(x) {
+    if (x < 0) {
+      return "Error: Negative argument for sqrt";
+    }
+    var guess = x / 2.0;
+    var epsilon = 0.00001;
+    var difference = guess * guess - x;
+    while (difference > epsilon or difference < -epsilon) {
+      guess = (guess + x / guess) / 2.0;
+      difference = guess * guess - x;
+    }
+    return guess;
   }
 }
 

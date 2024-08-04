@@ -74,15 +74,21 @@ void loadStandardLibrary() {
   char filePath[256];
   snprintf(filePath, sizeof(filePath), "%s%s", stlPath, mathFile);
 
-  FILE *file = fopen(filePath, "r");
+  printf("Attempting to open standard library file: %s\n", filePath);
+
+  FILE *file = fopen(filePath, "r");  // Open as a text file
   if (!file) {
     fprintf(stderr, "Failed to open standard library file: %s\n", filePath);
     return;
   }
 
+  printf("File opened successfully: %s\n", filePath);
+
   fseek(file, 0, SEEK_END);
   size_t fileSize = ftell(file);
   fseek(file, 0, SEEK_SET);
+
+  printf("File size: %zu bytes\n", fileSize);
 
   char *source = (char *)malloc(fileSize + 1);
   if (!source) {
@@ -91,13 +97,29 @@ void loadStandardLibrary() {
     return;
   }
 
-  fread(source, 1, fileSize, file);
-  source[fileSize] = '\0';
-  fclose(file);
+  size_t index = 0;
+  int c;
+  while ((c = fgetc(file)) != EOF) {
+    if (c == '\n' || c == '\r') {
+      source[index++] = ' ';
+    } else {
+      source[index++] = (char)c;
+    }
+  }
+  source[index] = '\0';
 
-  interpret(source);
+  fclose(file);
+  
+  printf("Loaded standard library source:\n%s\n", source);
+
+  InterpretResult result = interpret(source);
   free(source);
+
+  if (result == INTERPRET_COMPILE_ERROR) exit(65);
+  if (result == INTERPRET_RUNTIME_ERROR) exit(70);
 }
+
+
 
 int main(int argc, const char* argv[]) {
   initVM();

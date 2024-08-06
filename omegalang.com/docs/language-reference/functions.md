@@ -10,11 +10,11 @@ In Omega, functions are first-class citizens. This means they can be treated in 
 
 ## Defining Functions
 
-In Omega, functions are defined using the `fn` keyword. This is followed by the function name, a pair of parentheses `()` indicating parameters, the function's return type denoted with `@<type>`, and the function body enclosed in braces `{}`.
+In Omega, functions are defined using the `fn` keyword. This is followed by the function name, a pair of parentheses `()` indicating parameters, the function's __optional__ return type denoted with `@<type>`, and the function body enclosed in braces `{}`.
 
 ## Returning
 
-All functions in Omega have a return type. If a function doesn't return anything, then its return type is void.
+All functions in Omega have a return type. If a function doesn't return anything, then its return type is void. While you can specify your desired return type, it is completely optional at this time.
 
 ## Calling Functions
 
@@ -28,18 +28,22 @@ The basic syntax for defining a function in Omega is as follows:
 fn my_func() @void {
   // function body
 }
+
+fn func_two() {
+ // function body 
+}
 ```
 
 ### Example
 
-Here is a simple example of a function in Omega:
+Here is a simple example of functions in Omega:
 
 ```omega
 fn add_ints(x, y) @int {
   return x + y;
 }
 
-fn main() @void {
+fn main() {
   out add_ints(420, 69);
 }
 ```

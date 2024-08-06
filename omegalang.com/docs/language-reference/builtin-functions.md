@@ -22,10 +22,54 @@ Outputs the evaluation of the remainder of the line into the console.
 out "Hello, Omega!"; // Hello, Omega!
 ```
 
-## out(x)
+## length(x)
 
-Outputs the contents to the terminal. Note that `out` also returns a void object.
+Takes one argument and returns the length. Can be an array or a string.
 
 ```omega
-out("Hello World!") // Hello World\nvoid.
+var my_arr = [1, 2, 3, 4, 5];
+var hello = "Hello, Omega!";
+out length(my_arr); // -> 5;
+out length(hello); // -> 13;
+```
+
+## rest(x)
+Rest accepts one argument, an array, removes the first element from the array, and returns a new array with the remaining elements.
+
+```omega
+var my_arr = [1, 2, 3, 4, 5];
+out rest(my_arr); // -> returns [2, 3, 4, 5]
+```
+
+## tail(x)
+Tail accepts one argument (an array), and returns the last element found in the array, and removes that element from the original array.
+
+```omega
+var my_arr = [1, 2, 3];
+out tail(my_arr); // -> returns 3, my_arr is now [1, 2]
+```
+
+## head(x)
+Head accepts one argument (an array), and returns the first element found in the array, and removes that element from the original array.
+
+```omega
+var my_arr = [1, 2, 3];
+out head(my_arr); // -> returns 1, my_arr is now [2, 3]
+```
+
+## append(x, y)
+Append accepts two arguments: an array, and a value.
+
+```omega
+var my_arr = [1, 2, 3];
+out append(my_arr, 42); // -> [1, 2, 3, 42]
+```
+
+## prepend(x, y)
+
+Prepend accepts two arguments: an array, and a value.
+
+```omega
+var my_arr = [1, 2, 3];
+out prepend(my_arr, 42); // -> [42, 1, 2, 3]
 ```

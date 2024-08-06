@@ -20,17 +20,16 @@ var my_integer = 42069;
 
 ## Data Types
 
-Currently, Omega supports three basic data types: integers, booleans, and strings.
-
-While arrays and hashes are possible and supported as of Omega v0.9, they're not usable as variables due to a current lack of variable and return data types.
+Currently, Omega supports four basic data types: integers, booleans, strings, and arrays.
 
 ## Examples
 
-Declaring some variables with an initial values:
+Declaring some variables with initial values:
 
 ```omega
 var weed_number = 420;
 var sex_number = 69;
 var is_hungry = true;
 var hello_world = "Hello, Omega!";
+var my_arr = [weed_number, sex_number, is_hungry, hello_world];
 ```

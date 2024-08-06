@@ -53,7 +53,7 @@ static char* readFile(const char* path) {
 }
 
 static void runFile(const char* path) {
-  // restrict files to those that contain a .o extension
+  // restrict files to those that contain a .omg extension
   const char* extension = strrchr(path, '.');
   if (extension == NULL || strcmp(extension, ".omg") != 0) {
     fprintf(stderr, "Error: File must be an Omega code file (.omg extension).\n");

@@ -8,7 +8,7 @@ Arrays have been introduced to Omega in v0.11.0.
 
 ## Introduction
 
-Arrays in Omega are versatile and powerful data structures that allow you to store multiple values in a single variable. Arrays can contain elements of any data type, including numbers, strings, booleans, other arrays, and even functions! This documentation provides a comprehensive guide on how to use arrays in Omega, including array creation, access, manipulation, and built-in array functions.
+Arrays in Omega are versatile and powerful data structures that allow you to store multiple values in a single variable. Arrays can contain elements of any data type, including numbers, strings, booleans, other arrays, and even functions!
 
 ## Creating Arrays
 
@@ -17,7 +17,7 @@ To create an array in Omega, use square brackets `[]` and separate elements with
 ```omega
 var empty_arr = [];
 var number_arr = [1, 2, 3, 4, 5];
-var mixeed_arr = [1, "two", true, 3.14, [5, 6]];
+var mixed_arr = [1, "two", true, 3.14, [5, 6]];
 ```
 
 ## Accessing Array Elements
@@ -39,105 +39,7 @@ var my_arr = [10, 20, 30, 40, 50];
 my_arr[0] = 15; // my_arr is now [15, 20, 30, 40, 50]
 ```
 
-## Built-in Array Functions
-
-Omega provides a variety of built-in functions for manipulating arrays:
-
-### prepend()
-
-The `prepend()` function adds an element to the beginning of an array.
-
-#### Syntax:
-
-```omega
-prepend(array, value);
-```
-
-#### Example:
-
-```omega
-var my_arr = [2, 3, 4];
-prepend(my_arr, 1); // my_arr is now [1, 2, 3, 4]
-```
-
-### append()
-
-The `append()` function adds an element to the end of an array.
-
-#### Syntax:
-
-```omega
-append(array, value);
-```
-
-#### Example:
-
-```omega
-var my_arr = [1, 2, 3];
-append(my_arr, 4); // my_arr is now [1, 2, 3, 4]
-```
-
-### head()
-
-The `head()` function removes and returns the first element of an array.
-
-#### Syntax:
-
-```omega
-var first_el = head(array);
-```
-
-#### Example:
-
-```omega
-var my_arr = [1, 2, 3, 4];
-var first_el = head(my_arr); // first_el is 1, my_arr is now [2, 3, 4]
-```
-
-### tail()
-
-The `tail()` function removes and returns the last element of an array.
-
-#### Syntax:
-
-```omega
-var last_el = tail(array);
-```
-
-#### Example:
-
-```omega
-var my_arr = [1, 2, 3, 4];
-var last_el = tail(my_arr); // last_el is 4, my_arr is now [1, 2, 3]
-```
-
-### rest()
-
-The `rest()` function returns a new array containing all elements except the first one.
-
-#### Syntax:
-
-```omega
-var new_arr = rest(arr);
-```
-
-#### Example:
-
-```omega
-var my_arr = [1, 2, 3, 4];
-var new_arr = rest(my_arr); // new_arr is [2, 3, 4]
-```
-
-## Printing Arrays
-
-You can print arrays using the `out` statement. Omega's `out` statement prints arrays in a readable format, showing all elements.
-
-```omega
-var my_arr = [1, 2, 3, 4, 5];
-out my_arr; // outputs: [1, 2, 3, 4, 5]
-```
-
-## Further Examples
+## Examples
 
 ### Example 1: Basic Array Operations
 

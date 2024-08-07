@@ -1,0 +1,21 @@
+fn calculate_pi_leibniz(iterations) {
+  var pi = 0;
+  var denominator = 1;
+  var add = true;
+  for (var i = 0; i < iterations; i = i + 1) {
+    if (add) {
+      pi = pi + 1 / denominator;
+    } else {
+      pi = pi - 1 / denominator;
+    }
+    add = !add;
+    denominator = denominator + 2;
+  }
+  return pi * 4;
+}
+
+var iterations = 100000000;
+var start = clock();
+var pi = calculate_pi_leibniz(iterations);
+out clock() - start;
+out pi;

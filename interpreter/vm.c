@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -20,7 +21,7 @@ static Value arrayTail(int argCount, Value* args);
 static Value arrayRest(int argCount, Value* args);
 static Value lengthNative(int argCount, Value* args) {
   if (argCount != 1) {
-    runtimeError("length() takes exactly 1 argument.");
+    runtimeError("SKILL ISSUE: length() takes exactly 1 argument.");
     return NIL_VAL;
   }
 
@@ -31,7 +32,7 @@ static Value lengthNative(int argCount, Value* args) {
     ObjArray* array = AS_ARRAY(args[0]);
     return NUMBER_VAL((double)array->elements.count);
   } else {
-    runtimeError("Argument to length() must be a string or an array.");
+    runtimeError("SKILL ISSUE: Argument to length() must be a string or an array.");
     return NIL_VAL;
   }
 }
@@ -41,7 +42,7 @@ static Value clockNative(int argCount, Value* args) {
 
 static Value arrayPrepend(int argCount, Value* args) {
   if (argCount != 2 || !IS_ARRAY(args[0])) {
-    runtimeError("prepend() takes exactly 2 arguments: array and value.");
+    runtimeError("SKILL ISSUE: prepend() takes exactly 2 arguments: array and value.");
     return NIL_VAL;
   }
 
@@ -60,7 +61,7 @@ static Value arrayPrepend(int argCount, Value* args) {
 
 static Value arrayAppend(int argCount, Value* args) {
   if (argCount != 2 || !IS_ARRAY(args[0])) {
-    runtimeError("append() takes exactly 2 arguments: array and value.");
+    runtimeError("SKILL ISSUE: append() takes exactly 2 arguments: array and value.");
     return NIL_VAL;
   }
 
@@ -74,14 +75,14 @@ static Value arrayAppend(int argCount, Value* args) {
 
 static Value arrayHead(int argCount, Value* args) {
   if (argCount != 1 || !IS_ARRAY(args[0])) {
-    runtimeError("head() takes exactly 1 argument: array.");
+    runtimeError("SKILL ISSUE: head() takes exactly 1 argument: array.");
     return NIL_VAL;
   }
 
   ObjArray* array = AS_ARRAY(args[0]);
 
   if (array->elements.count == 0) {
-    runtimeError("head() called on an empty array.");
+    runtimeError("SKILL ISSUE: head() called on an empty array.");
     return NIL_VAL;
   }
 
@@ -97,14 +98,14 @@ static Value arrayHead(int argCount, Value* args) {
 
 static Value arrayTail(int argCount, Value* args) {
   if (argCount != 1 || !IS_ARRAY(args[0])) {
-    runtimeError("tail() takes exactly 1 argument: array.");
+    runtimeError("SKILL ISSUE: tail() takes exactly 1 argument: array.");
     return NIL_VAL;
   }
 
   ObjArray* array = AS_ARRAY(args[0]);
 
   if (array->elements.count == 0) {
-    runtimeError("tail() called on an empty array.");
+    runtimeError("SKILL ISSUE: tail() called on an empty array.");
     return NIL_VAL;
   }
 
@@ -116,13 +117,13 @@ static Value arrayTail(int argCount, Value* args) {
 
 static Value arrayRest(int argCount, Value* args) {
   if (argCount != 1 || !IS_ARRAY(args[0])) {
-    runtimeError("rest() takes exactly 1 argument: array.");
+    runtimeError("SKILL ISSUE: rest() takes exactly 1 argument: array.");
     return NIL_VAL;
   }
 
   ObjArray* array = AS_ARRAY(args[0]);
   if (array->elements.count == 0) {
-    runtimeError("rest() called on an empty array.");
+    runtimeError("SKILL ISSUE: rest() called on an empty array.");
     return NIL_VAL;
   }
 
@@ -220,13 +221,13 @@ static Value peek(int distance) {
 
 static bool call(ObjClosure* closure, int argCount) {
   if (argCount != closure->function->arity) {
-    runtimeError("Expected %d arguments but got %d.",
+    runtimeError("SKILL ISSUE: Expected %d arguments but got %d.",
         closure->function->arity, argCount);
     return false;
   }
 
   if (vm.frameCount == FRAMES_MAX) {
-    runtimeError("Stack overflow.");
+    runtimeError("SKILL ISSUE: Stack overflow.");
     return false;
   }
 
@@ -270,7 +271,7 @@ static bool callValue(Value callee, int argCount) {
                     &initializer)) {
           return call(AS_CLOSURE(initializer), argCount);
           } else if (argCount != 0) {
-          runtimeError("Expected 0 arguments but got %d.",
+          runtimeError("SKILL ISSUE: Expected 0 arguments but got %d.",
                       argCount);
           return false;
         }
@@ -289,7 +290,7 @@ static bool callValue(Value callee, int argCount) {
         break; // non callable object type
     }
   }
-  runtimeError("Can only call functions and classes.");
+  runtimeError("SKILL ISSUE: Can only call functions and classes.");
   return false;
 }
 
@@ -297,7 +298,7 @@ static bool invokeFromClass(ObjClass* klass, ObjString* name,
                             int argCount) {
   Value method;
   if (!tableGet(&klass->methods, name, &method)) {
-    runtimeError("Undefined property '%s'.", name->chars);
+    runtimeError("SKILL ISSUE: Undefined property '%s'.", name->chars);
     return false;
   }
   return call(AS_CLOSURE(method), argCount);
@@ -307,7 +308,7 @@ static bool invoke(ObjString* name, int argCount) {
   Value receiver = peek(argCount);
 
   if (!IS_INSTANCE(receiver)) {
-    runtimeError("Only instances have methods.");
+    runtimeError("SKILL ISSUE: Only instances have methods.");
     return false;
   }
 
@@ -325,7 +326,7 @@ static bool invoke(ObjString* name, int argCount) {
 static bool bindMethod(ObjClass* klass, ObjString* name) {
   Value method;
   if (!tableGet(&klass->methods, name, &method)) {
-    runtimeError("Undefined property '%s'.", name->chars);
+    runtimeError("SKILL ISSUE: Undefined property '%s'.", name->chars);
     return false;
   }
 
@@ -416,7 +417,7 @@ static InterpretResult run() {
   #define BINARY_OP(valueType, op) \
     do { \
       if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) { \
-        runtimeError("Operands must be numbers."); \
+        runtimeError("SKILL ISSUE: Operands must be numbers."); \
         return INTERPRET_RUNTIME_ERROR; \
       } \
       double b = AS_NUMBER(pop()); \
@@ -466,7 +467,7 @@ static InterpretResult run() {
         ObjString* name = READ_STRING();
         Value value;
         if (!tableGet(&vm.globals, name, &value)) {
-          runtimeError("Undefined variable '%s'.", name->chars);
+          runtimeError("SKILL ISSUE: Undefined variable '%s'.", name->chars);
           return INTERPRET_RUNTIME_ERROR;
         }
         push(value);
@@ -482,7 +483,7 @@ static InterpretResult run() {
         ObjString* name = READ_STRING();
         if (tableSet(&vm.globals, name, peek(0))) {
           tableDelete(&vm.globals, name);
-          runtimeError("Undefined variable '%s'.", name->chars);
+          runtimeError("SKILL ISSUE: Undefined variable '%s'.", name->chars);
           return INTERPRET_RUNTIME_ERROR;
         }
         break;
@@ -499,7 +500,7 @@ static InterpretResult run() {
       }
       case OP_GET_PROPERTY: {
         if (!IS_INSTANCE(peek(0))) {
-          runtimeError("Only instances have properties.");
+          runtimeError("SKILL ISSUE: Only instances have properties.");
           return INTERPRET_RUNTIME_ERROR;
         }
 
@@ -520,7 +521,7 @@ static InterpretResult run() {
       }
       case OP_SET_PROPERTY: {
         if (!IS_INSTANCE(peek(1))) {
-          runtimeError("Only instances have fields.");
+          runtimeError("SKILL ISSUE: Only instances have fields.");
           return INTERPRET_RUNTIME_ERROR;
         }
         
@@ -556,10 +557,23 @@ static InterpretResult run() {
           double a = AS_NUMBER(pop());
           push(NUMBER_VAL(a + b));
         } else {
-          runtimeError(
-            "Operands must be two numbers or two strings.");
+          runtimeError("SKILL ISSUE: Operands must be two numbers or two strings.");
           return INTERPRET_RUNTIME_ERROR;
         }
+        break;
+      }
+      case OP_MODULO: {
+        if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {
+          runtimeError("SKILL ISSUE: Operands must be numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        double b = AS_NUMBER(pop());
+        double a = AS_NUMBER(pop());
+        if (b == 0) {
+          runtimeError("SKILL ISSUE: Division by zero.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        push(NUMBER_VAL(fmod(a, b)));
         break;
       }
       case OP_SUBTRACT: BINARY_OP(NUMBER_VAL, -); break;
@@ -570,7 +584,7 @@ static InterpretResult run() {
         break;
       case OP_NEGATE:
         if (!IS_NUMBER(peek(0))) {
-          runtimeError("Operand must be a number.");
+          runtimeError("SKILL ISSUE: Operand must be a number.");
           return INTERPRET_RUNTIME_ERROR;
         }
         push(NUMBER_VAL(-AS_NUMBER(pop())));
@@ -654,7 +668,7 @@ static InterpretResult run() {
         // only check return type if one is specified
         if (frame->closure->function->returnType != TYPE_NONE &&
             !checkReturnType(frame->closure->function, result)) {
-          runtimeError("Invalid return type.");
+          runtimeError("SKILL ISSUE: Invalid return type.");
           return INTERPRET_RUNTIME_ERROR;
         }
 
@@ -669,7 +683,7 @@ static InterpretResult run() {
       case OP_INHERIT: {
         Value superclass = peek(1);
         if (!IS_CLASS(superclass)) {
-          runtimeError("Superclass must be a class.");
+          runtimeError("SKILL ISSUE: Superclass must be a class.");
           return INTERPRET_RUNTIME_ERROR;
         }
 
@@ -696,7 +710,7 @@ static InterpretResult run() {
       }
       case OP_ARRAY_GET: {
         if (!IS_ARRAY(peek(1)) || !IS_NUMBER(peek(0))) {
-          runtimeError("Array access requires an array and a number.");
+          runtimeError("SKILL ISSUE: Array access requires an array and a number.");
           return INTERPRET_RUNTIME_ERROR;
         }
         int index = AS_NUMBER(pop());
@@ -706,7 +720,7 @@ static InterpretResult run() {
       }
       case OP_ARRAY_SET: {
         if (!IS_ARRAY(peek(2)) || !IS_NUMBER(peek(1))) {
-          runtimeError("Array access requires an array and a number.");
+          runtimeError("SKILL ISSUE: Array access requires an array and a number.");
           return INTERPRET_RUNTIME_ERROR;
         }
         Value value = peek(0);

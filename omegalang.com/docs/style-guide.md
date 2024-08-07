@@ -38,7 +38,7 @@ This makes for smaller diffs and less rightward drift.
 
 ### Trailing commas
 
-In comma-separated listts of any kind, do not use a trailing comma when followed by a newline:
+In comma-separated lists of any kind, do not use a trailing comma when followed by a newline:
 
 ```omega
 function_call(

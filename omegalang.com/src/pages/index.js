@@ -23,7 +23,7 @@ function HomepageHeader() {
             Check Out Omega! 💻
           </Link>
         </div>
-        <p>Current version: v0.12.1</p>
+        <p>Current version: v0.13.0</p>
       </div>
     </header>
   );

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -366,26 +367,28 @@ static uint8_t parseVariable(const char* errorMessage) {
 }
 
 void loadFile(char* name) {
-  printf("start loadfile\n");
-  const char* fp = strcat(name, ".omg");
-
-  printf("set fp\n");
-  
-  char filePath[256];
-
-  printf("allocate filepath size\n");
-  snprintf(filePath, sizeof(filePath), "./stl/%s", fp);
-  printf("after set filepath:%s\n", filePath);
-  printf("pre error: %d (%s)\n", errno, strerror(errno));
-  FILE *file = fopen(filePath, "r");  // Open as a text file
-  printf("post error: %d (%s)\n", errno, strerror(errno));
-  fflush(stdout);
-  printf("file path opened, before check");
-  if (!file) {
-    fprintf(stderr, "Failed to open standard library file: %s\n", filePath);
+  if (strlen(name) + 4 >= 256) {
+    fprintf(stderr, "File name is too long.\n");
     return;
   }
 
+  char nameCopy[256];
+  strcpy(nameCopy, name);
+  strcat(nameCopy, ".omg");
+  
+  char filePath[256];
+  snprintf(filePath, sizeof(filePath), "./stl/%s", nameCopy);
+
+  struct stat buffer;
+  if (stat(filePath, &buffer) != 0) {
+    snprintf(filePath, sizeof(filePath), "%s.omg", name);
+  }
+
+  FILE *file = fopen(filePath, "r");  // Open as a text file
+  if (!file) {
+    fprintf(stderr, "Failed to open file: %s\n", filePath);
+    return;
+  }
 
   fseek(file, 0, SEEK_END);
   size_t fileSize = ftell(file);
@@ -393,7 +396,7 @@ void loadFile(char* name) {
 
   char *source = (char *)malloc(fileSize + 1);
   if (!source) {
-    fprintf(stderr, "Failed to allocate memory for standard library.\n");
+    fprintf(stderr, "Failed to allocate memory for file: %s\n", filePath);
     fclose(file);
     return;
   }
@@ -422,6 +425,7 @@ static uint8_t parseImport(const char* errorMessage) {
   consume(TOKEN_IDENTIFIER, errorMessage);
   char* name = fetchImportName(&parser.previous)->chars;
   loadFile(name);
+  return 0;
   // return name;
 }
 
@@ -865,7 +869,7 @@ static void varDeclaration() {
 }
 
 static void importDeclaration() {
-  uint8_t global = parseImport("Expect a file to import.");
+  parseImport("Expect a file to import.");
   // if (match(TOKEN_EQUAL)) {
   //   expression();
   // } else {

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -559,6 +560,20 @@ static InterpretResult run() {
           runtimeError("SKILL ISSUE: Operands must be two numbers or two strings.");
           return INTERPRET_RUNTIME_ERROR;
         }
+        break;
+      }
+      case OP_MODULO: {
+        if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {
+          runtimeError("SKILL ISSUE: Operands must be numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        double b = AS_NUMBER(pop());
+        double a = AS_NUMBER(pop());
+        if (b == 0) {
+          runtimeError("SKILL ISSUE: Division by zero.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        push(NUMBER_VAL(fmod(a, b)));
         break;
       }
       case OP_SUBTRACT: BINARY_OP(NUMBER_VAL, -); break;

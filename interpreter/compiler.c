@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -208,8 +209,7 @@ static void initCompiler(Compiler* compiler, FunctionType type) {
   compiler->function = newFunction();
   current = compiler;
   if (type != TYPE_SCRIPT) {
-    current->function->name = copyString(parser.previous.start,
-                                          parser.previous.length);
+    current->function->name = copyString(parser.previous.start, parser.previous.length);
   }
 
   Local* local = &current->locals[current->localCount++];
@@ -265,8 +265,11 @@ static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
 static uint8_t identifierConstant(Token* name) {
-  return makeConstant(OBJ_VAL(copyString(name->start,
-                                          name->length)));
+  return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+
+static ObjString* fetchImportName(Token* name) {
+  return copyString(name->start, name->length);
 }
 
 static bool identifiersEqual(Token* a, Token* b) {
@@ -288,8 +291,7 @@ static int resolveLocal(Compiler* compiler, Token* name) {
   return -1;
 }
 
-static int addUpvalue(Compiler* compiler, uint8_t index,
-                      bool isLocal) {
+static int addUpvalue(Compiler* compiler, uint8_t index, bool isLocal) {
   int upvalueCount = compiler->function->upvalueCount;
 
   for (int i = 0; i < upvalueCount; i++) {
@@ -361,6 +363,66 @@ static uint8_t parseVariable(const char* errorMessage) {
   if (current->scopeDepth > 0) return 0;
 
   return identifierConstant(&parser.previous);
+}
+
+void loadFile(char* name) {
+  printf("start loadfile\n");
+  const char* fp = strcat(name, ".omg");
+
+  printf("set fp\n");
+  
+  char filePath[256];
+
+  printf("allocate filepath size\n");
+  snprintf(filePath, sizeof(filePath), "./stl/%s", fp);
+  printf("after set filepath:%s\n", filePath);
+  printf("pre error: %d (%s)\n", errno, strerror(errno));
+  FILE *file = fopen(filePath, "r");  // Open as a text file
+  printf("post error: %d (%s)\n", errno, strerror(errno));
+  fflush(stdout);
+  printf("file path opened, before check");
+  if (!file) {
+    fprintf(stderr, "Failed to open standard library file: %s\n", filePath);
+    return;
+  }
+
+
+  fseek(file, 0, SEEK_END);
+  size_t fileSize = ftell(file);
+  fseek(file, 0, SEEK_SET);
+
+  char *source = (char *)malloc(fileSize + 1);
+  if (!source) {
+    fprintf(stderr, "Failed to allocate memory for standard library.\n");
+    fclose(file);
+    return;
+  }
+
+  size_t index = 0;
+  int c;
+  while ((c = fgetc(file)) != EOF) {
+    if (c == '\n' || c == '\r') {
+      source[index++] = ' ';
+    } else {
+      source[index++] = (char)c;
+    }
+  }
+  source[index] = '\0';
+
+  fclose(file);
+
+  InterpretResult result = interpret(source);
+  free(source);
+
+  if (result == INTERPRET_COMPILE_ERROR) exit(65);
+  if (result == INTERPRET_RUNTIME_ERROR) exit(70);
+}
+
+static uint8_t parseImport(const char* errorMessage) {
+  consume(TOKEN_IDENTIFIER, errorMessage);
+  char* name = fetchImportName(&parser.previous)->chars;
+  loadFile(name);
+  // return name;
 }
 
 static void markInitialized() {
@@ -622,6 +684,7 @@ ParseRule rules[] = {
   [TOKEN_THIS]          = {this_,    NULL,   PREC_NONE},
   [TOKEN_TRUE]          = {literal,  NULL,   PREC_NONE},
   [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_IMPORT]        = {NULL,     NULL,   PREC_NONE},
   [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_EOF]           = {NULL,     NULL,   PREC_NONE},
@@ -797,9 +860,19 @@ static void varDeclaration() {
   } else {
     emitByte(OP_NIL);
   }
-  consume(TOKEN_SEMICOLON,
-          "Expect ';' after variable declaration.");
+  consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration.");
   defineVariable(global);
+}
+
+static void importDeclaration() {
+  uint8_t global = parseImport("Expect a file to import.");
+  // if (match(TOKEN_EQUAL)) {
+  //   expression();
+  // } else {
+  //   emitByte(OP_NIL);
+  // }
+  // consume(TOKEN_SEMICOLON, "Expect ';' after import declaration.");
+  // loadFile(global);
 }
 
 static void expressionStatement() {
@@ -960,6 +1033,7 @@ static void synchronize() {
       case TOKEN_WHILE:
       case TOKEN_OUT:
       case TOKEN_RETURN:
+      case TOKEN_IMPORT:
         return;
       default:
         ; // do nothing
@@ -976,6 +1050,8 @@ static void declaration() {
     fnDeclaration();
   } else if (match(TOKEN_VAR)) {
     varDeclaration();
+  } else if (match(TOKEN_IMPORT)) {
+    importDeclaration();
   } else {
     statement();
   }

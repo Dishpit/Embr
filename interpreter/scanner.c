@@ -123,7 +123,13 @@ static TokenType identifierType() {
         }
       }
       break;
-    case 'i': return checkKeyword(1, 1, "f", TOKEN_IF);
+    case 'i':
+      if (scanner.current - scanner.start > 1) {
+        switch (scanner.start[1]) {
+          case 'f': return checkKeyword(2, 0, "", TOKEN_IF);
+          case 'm': return checkKeyword(2, 4, "port", TOKEN_IMPORT);
+        }
+      }
     case 'n': return checkKeyword(1, 2, "il", TOKEN_NIL);
     case 'o':
       if (scanner.current - scanner.start > 1) {
@@ -207,6 +213,7 @@ Token scanToken() {
     case '%': return makeToken(TOKEN_MODULO);
     case '/': return makeToken(TOKEN_SLASH);
     case '*': return makeToken(TOKEN_STAR);
+    case '#': return makeToken(TOKEN_IMPORT);
     case '@': return makeToken(TOKEN_AT);
     case '!':
       return makeToken(

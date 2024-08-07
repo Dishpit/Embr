@@ -1,0 +1,8 @@
+import Math
+// # Math
+
+fn hello_world() {
+  out "Hello, Omega!";
+}
+
+hello_world();

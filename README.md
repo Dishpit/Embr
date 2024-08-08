@@ -5,10 +5,12 @@ This is the main source code repository for Omega.
 ## Compiling the Interpreter
 
 Quick and easy compilation:
-`cl *.c /Fe:omega.exe`
+Windows: `cl *.c /Fe:omega.exe`
+Ubuntu: `gcc *.c -o omega -00 -g`
 
 Full compilation and deployment to production:
-`cl *.c /Fe:omega_v0.14.0_win_x64.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
+Windows: `cl *.c /Fe:omega_v0.14.0_win_x64.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
+Ubuntu: `gcc *.c -o omega_v0.14.0_linux_x64 -O3 -flto -s -DNDEBUG -lm`
 
 ## About Omega
 

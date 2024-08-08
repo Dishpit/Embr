@@ -222,15 +222,32 @@ Token scanToken() {
       return makeToken(
         match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
     case '<':
-      return makeToken(
-        match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+      if (match('=')) {
+        return makeToken(TOKEN_LESS_EQUAL);
+      } else if (match('<')) {
+          return makeToken(TOKEN_BITWISE_LS);
+      } else {
+         return makeToken(TOKEN_LESS);
+      }
+      break;
     case '>':
-      return makeToken(
-        match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+      if (match('=')) {
+        return makeToken(TOKEN_GREATER_EQUAL);
+      } else if (match('>')) {
+          return makeToken(TOKEN_BITWISE_RS);
+      } else {
+          return makeToken(TOKEN_GREATER);
+      }
+      break;
     case '"':
     case '\'':
     case '`':
+    // bitwise operators
       return string();
+    case '&': return makeToken(TOKEN_BITWISE_AND);
+    case '|': return makeToken(TOKEN_BITWISE_OR);
+    case '^': return makeToken(TOKEN_BITWISE_XOR);
+    case '~': return makeToken(TOKEN_BITWISE_NOT);
   }
 
   return errorToken("Unexpected character.");

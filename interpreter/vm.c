@@ -549,6 +549,73 @@ static InterpretResult run() {
       }
       case OP_GREATER:  BINARY_OP(BOOL_VAL, >); break;
       case OP_LESS:     BINARY_OP(BOOL_VAL, <); break;
+      case OP_BITWISE_AND: {
+        if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a & b));
+        } else {
+          runtimeError("SKILL ISSUE: operands must be numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
+      case OP_BITWISE_OR: {
+        if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a | b));
+        } else {
+          runtimeError("SKILL ISSUE: Operands must be two numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
+      case OP_BITWISE_XOR: {
+        if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a ^ b));
+        } else {
+          runtimeError("SKILL ISSUE: Operands must be two numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
+      case OP_BITWISE_LS: {
+        if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a << b));
+        } else {
+          runtimeError("SKILL ISSUE: Operands must be two numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
+      case OP_BITWISE_RS: {
+        if (IS_NUMBER(peek(0)) & IS_NUMBER(peek(1))) {
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a >> b));
+        } else {
+          runtimeError("SKILL ISSUE: Operands must be two numbers.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
+      case OP_BITWISE_NOT: {
+        if (IS_NUMBER(peek(0))) {
+          double value = AS_NUMBER(pop());
+          int intValue = (int)value;
+          int result = ~intValue;
+          push(NUMBER_VAL(result));
+        } else {
+          runtimeError("SKILL ISSUE: Operand must be a number.");
+          return INTERPRET_RUNTIME_ERROR;
+        }
+        break;
+      }
       case OP_ADD: {
         if (IS_STRING(peek(0)) && IS_STRING(peek(1))) {
           concatenate();

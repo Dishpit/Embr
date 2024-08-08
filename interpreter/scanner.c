@@ -230,7 +230,10 @@ Token scanToken() {
     case '"':
     case '\'':
     case '`':
+    // bitwise operators
       return string();
+    case '&':
+      return makeToken(TOKEN_BITWISE_AND);
   }
 
   return errorToken("Unexpected character.");

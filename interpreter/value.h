@@ -29,6 +29,7 @@ typedef uint64_t Value;
 #define AS_ARRAY(value)     ((ObjArray*)AS_OBJ(value))
 #define AS_BOOL(value)      ((value) == TRUE_VAL)
 #define AS_NUMBER(value)    valueToNum(value)
+#define AS_BINARY(value)    valueToBin(value)
 #define AS_OBJ(value) \
     ((Obj*)(uintptr_t)((value) & ~(SIGN_BIT | QNAN)))
 
@@ -38,8 +39,17 @@ typedef uint64_t Value;
 #define TRUE_VAL        ((Value)(uint64_t)(QNAN | TAG_TRUE))
 #define NIL_VAL         ((Value)(uint64_t)(QNAN | TAG_NIL))
 #define NUMBER_VAL(num) numToValue(num)
+#define BINARY_VAL(val) binaryToValue(val)
 #define OBJ_VAL(obj) \
     (Value)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
+
+static inline double valueToBin(Value value) {
+  printf("inside value to num:, %d\n", value);
+  printf("inside value to num, mem address:, %d\n", &value);
+  double num;
+  memcpy(&num, &value, sizeof(Value));
+  return num;
+}
 
 static inline double valueToNum(Value value) {
   double num;

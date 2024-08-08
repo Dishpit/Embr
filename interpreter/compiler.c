@@ -488,6 +488,9 @@ static void binary(bool canAssign) {
     case TOKEN_SLASH:         emitByte(OP_DIVIDE); break;
     case TOKEN_BITWISE_AND:   emitByte(OP_BITWISE_AND); break;
     case TOKEN_BITWISE_OR:    emitByte(OP_BITWISE_OR); break;
+    case TOKEN_BITWISE_XOR:   emitByte(OP_BITWISE_XOR); break;
+    case TOKEN_BITWISE_LS:    emitByte(OP_BITWISE_LS); break;
+    case TOKEN_BITWISE_RS:    emitByte(OP_BITWISE_RS); break;
     default: return; // unreachable
   }
 }
@@ -646,6 +649,7 @@ static void unary(bool canAssign) {
   switch (operatorType) {
     case TOKEN_BANG:  emitByte(OP_NOT); break;
     case TOKEN_MINUS: emitByte(OP_NEGATE); break;
+    case TOKEN_BITWISE_NOT: emitByte(OP_BITWISE_NOT); break;
     default: return; // unreachable
   }
 }
@@ -696,6 +700,10 @@ ParseRule rules[] = {
   [TOKEN_ERROR]         = {NULL,          NULL,         PREC_NONE},
   [TOKEN_BITWISE_AND]   = {NULL,          binary,       PREC_BITWISE},
   [TOKEN_BITWISE_OR]    = {NULL,          binary,       PREC_BITWISE},
+  [TOKEN_BITWISE_XOR]   = {NULL,          binary,       PREC_BITWISE},
+  [TOKEN_BITWISE_LS]    = {NULL,          binary,       PREC_BITWISE},
+  [TOKEN_BITWISE_RS]    = {NULL,          binary,       PREC_BITWISE},
+  [TOKEN_BITWISE_NOT]   = {unary,         NULL,         PREC_BITWISE},
   [TOKEN_EOF]           = {NULL,          NULL,         PREC_NONE},
 };
 

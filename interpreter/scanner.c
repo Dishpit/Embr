@@ -221,9 +221,12 @@ Token scanToken() {
     case '=':
       return makeToken(
         match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+      // TODO: add bitwise leftshift conditional
+      //
     case '<':
       return makeToken(
         match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+      // TODO: add bitwise rightshift conditional
     case '>':
       return makeToken(
         match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
@@ -232,10 +235,10 @@ Token scanToken() {
     case '`':
     // bitwise operators
       return string();
-    case '&':
-      return makeToken(TOKEN_BITWISE_AND);
-    case '|':
-      return makeToken(TOKEN_BITWISE_OR); 
+    case '&': return makeToken(TOKEN_BITWISE_AND);
+    case '|': return makeToken(TOKEN_BITWISE_OR);
+    case '^': return makeToken(TOKEN_BITWISE_XOR);
+    case '~': return makeToken(TOKEN_BITWISE_NOT);
   }
 
   return errorToken("Unexpected character.");

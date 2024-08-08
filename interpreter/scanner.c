@@ -221,15 +221,24 @@ Token scanToken() {
     case '=':
       return makeToken(
         match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
-      // TODO: add bitwise leftshift conditional
-      //
     case '<':
-      return makeToken(
-        match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
-      // TODO: add bitwise rightshift conditional
+      if (match('=')) {
+        return makeToken(TOKEN_LESS_EQUAL);
+      } else if (match('<')) {
+          return makeToken(TOKEN_BITWISE_LS);
+      } else {
+         return makeToken(TOKEN_LESS);
+      }
+      break;
     case '>':
-      return makeToken(
-        match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+      if (match('=')) {
+        return makeToken(TOKEN_GREATER_EQUAL);
+      } else if (match('>')) {
+          return makeToken(TOKEN_BITWISE_RS);
+      } else {
+          return makeToken(TOKEN_GREATER);
+      }
+      break;
     case '"':
     case '\'':
     case '`':

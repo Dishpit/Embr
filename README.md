@@ -6,7 +6,6 @@ This is the main source code repository for Omega.
 
 Quick and easy compilation:
 Windows: `cl *.c /Fe:omega.exe`
-Ubuntu: `gcc *.c -o omega -00 -g`
 
 Full compilation and deployment to production:
 Windows: `cl *.c /Fe:omega_v0.14.0_win_x64.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`

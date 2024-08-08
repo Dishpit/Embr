@@ -234,6 +234,8 @@ Token scanToken() {
       return string();
     case '&':
       return makeToken(TOKEN_BITWISE_AND);
+    case '|':
+      return makeToken(TOKEN_BITWISE_OR); 
   }
 
   return errorToken("Unexpected character.");

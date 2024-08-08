@@ -48,6 +48,7 @@ typedef enum {
   OP_ARRAY_GET,
   OP_ARRAY_SET,
   OP_BITWISE_AND,
+  OP_BITWISE_OR,
 } OpCode;
 
 typedef struct {

@@ -92,6 +92,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
       return simpleInstruction("OP_ADD", offset);
     case OP_BITWISE_AND:
       return simpleInstruction("OP_BITWISE_AND", offset);
+    case OP_BITWISE_OR:
+      return simpleInstruction("OP_BITWISE_OR", offset);
     case OP_MODULO:
       return simpleInstruction("OP_MODULO", offset);
     case OP_SUBTRACT:

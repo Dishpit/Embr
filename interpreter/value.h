@@ -43,10 +43,8 @@ typedef uint64_t Value;
 #define OBJ_VAL(obj) \
     (Value)(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj))
 
-static inline double valueToBin(Value value) {
-  printf("inside value to num:, %d\n", value);
-  printf("inside value to num, mem address:, %d\n", &value);
-  double num;
+static inline int valueToBin(Value value) {
+  int num;
   memcpy(&num, &value, sizeof(Value));
   return num;
 }

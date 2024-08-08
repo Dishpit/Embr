@@ -551,12 +551,11 @@ static InterpretResult run() {
       case OP_LESS:     BINARY_OP(BOOL_VAL, <); break;
       case OP_BITWISE_AND: {
         if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
-          int b = AS_BINARY(pop());
-          int a = AS_BINARY(pop());
-          double c = a & b;
-          push(c);
+          int b = (int)AS_NUMBER(pop());
+          int a = (int)AS_NUMBER(pop());
+          push(NUMBER_VAL(a & b));
         } else {
-          runtimeError("SKILL ISSUE: operands must be two numbers");
+          runtimeError("SKILL ISSUE: operands must be numbers.");
           return INTERPRET_RUNTIME_ERROR;
         }
         break;

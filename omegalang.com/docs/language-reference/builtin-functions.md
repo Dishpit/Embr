@@ -73,3 +73,15 @@ Prepend accepts two arguments: an array, and a value.
 var my_arr = [1, 2, 3];
 out prepend(my_arr, 42); // -> [42, 1, 2, 3]
 ```
+
+## remove(x, y)
+
+Remove accepts two arguments: a hash, and a key.
+
+```omega
+out my_hash; // -> {"hash table!": "first hash key!", dog: "Golden Retriever", apples: ["Golden Delicious", "Granny Smith"]}
+
+remove(my_hash, "dog");
+
+out my_hash; // -> {"hash table!": "first hash key!", apples: ["Golden Delicious", "Granny Smith"]}
+```

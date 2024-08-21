@@ -9,5 +9,5 @@ fn fibonacci(x) {
 }
 
 var start = clock();
-fibonacci(35);
+fibonacci(40);
 out clock() - start;

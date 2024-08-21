@@ -8,6 +8,8 @@
     "*.scss.liquid": "liquid-scss",
     "type_traits": "c",
     "xtr1common": "c",
-    "xutility": "c"
+    "xutility": "c",
+    "memory": "c",
+    "xmemory": "c"
   }
 }

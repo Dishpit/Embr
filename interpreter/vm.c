@@ -21,6 +21,19 @@ static Value arrayTail(int argCount, Value* args);
 static Value arrayRest(int argCount, Value* args);
 static Value dictRemove(int argCount, Value* args);
 
+static void growStack() {
+  int oldCapacity = vm.stackCapacity;
+  vm.stackCapacity *= 2;
+  vm.stack = GROW_ARRAY(Value, vm.stack, oldCapacity, vm.stackCapacity);
+  vm.stackTop = vm.stack + oldCapacity;
+}
+
+static void growFrames() {
+  int oldCapacity = vm.framesCapacity;
+  vm.framesCapacity *= 2;
+  vm.frames = GROW_ARRAY(CallFrame, vm.frames, oldCapacity, vm.framesCapacity);
+}
+
 static Value lengthNative(int argCount, Value* args) {
   if (argCount != 1) {
     runtimeError("SKILL ISSUE: length() takes exactly 1 argument.");
@@ -188,14 +201,15 @@ static void defineNative(const char* name, NativeFn function) {
 }
 
 void initVM() {
+  vm.stackCapacity = INITIAL_STACK_MAX;
+  vm.stack = ALLOCATE(Value, vm.stackCapacity);
+  vm.stackTop = vm.stack;
+
+  vm.framesCapacity = INITIAL_FRAMES_MAX;
+  vm.frames = ALLOCATE(CallFrame, vm.framesCapacity);
+
   resetStack();
   vm.objects = NULL;
-  vm.bytesAllocated = 0;
-  vm.nextGC = 1024 * 1024; // arbitrarily chosen. this will need tuning based on feedback. the goal is to not trigger the first few garbage collections too quickly but also to not wait too long.
-
-  vm.grayCount = 0;
-  vm.grayCapacity = 0;
-  vm.grayStack = NULL;
 
   initTable(&vm.globals);
   initTable(&vm.strings);
@@ -217,10 +231,15 @@ void freeVM() {
   freeTable(&vm.globals);
   freeTable(&vm.strings);
   vm.initString = NULL;
+  FREE_ARRAY(Value, vm.stack, vm.stackCapacity);
+  FREE_ARRAY(CallFrame, vm.frames, vm.framesCapacity);
   freeObjects();
 }
 
 void push(Value value) {
+  if (vm.stackTop == vm.stack + vm.stackCapacity) {
+    growStack();
+  }
   *vm.stackTop = value;
   vm.stackTop++;
 }
@@ -236,14 +255,12 @@ static Value peek(int distance) {
 
 static bool call(ObjClosure* closure, int argCount) {
   if (argCount != closure->function->arity) {
-    runtimeError("SKILL ISSUE: Expected %d arguments but got %d.",
-        closure->function->arity, argCount);
+    runtimeError("SKILL ISSUE: Expected %d arguments but got %d.", closure->function->arity, argCount);
     return false;
   }
 
-  if (vm.frameCount == FRAMES_MAX) {
-    runtimeError("SKILL ISSUE: Stack overflow.");
-    return false;
+  if (vm.frameCount == vm.framesCapacity) {
+    growFrames();
   }
 
   CallFrame* frame = &vm.frames[vm.frameCount++];

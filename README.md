@@ -11,6 +11,10 @@ Full compilation and deployment to production:
 Windows: `cl *.c /Fe:omega_v0.14.0_win_x64.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
 Ubuntu: `gcc *.c -o omega_v0.14.0_linux_x64 -O3 -flto -s -DNDEBUG -lm`
 
+Experimental Performance Build, Intel: `cl *.c /Fe:omega_v0.17.0_win_x64_intel.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:INTEL64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
+
+Experimental Performance Build, AMD: `cl *.c /Fe:omega_v0.17.0_win_x64_amd.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:AMD64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
+
 ## About Omega
 
 Omega is (obviously) in its extreme infancy stage; it hasn't even attached to the uterus lining yet. Be advised that everything has the potential to change as time goes on, but I'm planning to prevent any breaking changes as much as possible so I can maintain a singular backwards-compatible spec as opposed to Rust's tendency to break previous versions.

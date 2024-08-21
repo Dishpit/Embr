@@ -210,12 +210,6 @@ void initVM() {
 
   resetStack();
   vm.objects = NULL;
-  vm.bytesAllocated = 0;
-  vm.nextGC = 1024 * 1024; // arbitrarily chosen. this will need tuning based on feedback. the goal is to not trigger the first few garbage collections too quickly but also to not wait too long.
-
-  vm.grayCount = 0;
-  vm.grayCapacity = 0;
-  vm.grayStack = NULL;
 
   initTable(&vm.globals);
   initTable(&vm.strings);

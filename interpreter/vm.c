@@ -26,16 +26,12 @@ static void growStack() {
   vm.stackCapacity *= 2;
   vm.stack = GROW_ARRAY(Value, vm.stack, oldCapacity, vm.stackCapacity);
   vm.stackTop = vm.stack + oldCapacity;
-
-  printf("Debug: Stack grew from %d to %d.\n", oldCapacity, vm.stackCapacity);
 }
 
 static void growFrames() {
   int oldCapacity = vm.framesCapacity;
   vm.framesCapacity *= 2;
   vm.frames = GROW_ARRAY(CallFrame, vm.frames, oldCapacity, vm.framesCapacity);
-
-  printf("Debug: Frames array grew from %d to %d\n", oldCapacity, vm.framesCapacity);
 }
 
 static Value lengthNative(int argCount, Value* args) {

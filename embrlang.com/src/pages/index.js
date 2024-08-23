@@ -23,7 +23,7 @@ function HomepageHeader() {
             Check Out Embr! 💻
           </Link>
         </div>
-        <p>Current version: v0.17.1</p>
+        <p>Current version: v0.18.0</p>
       </div>
     </header>
   );

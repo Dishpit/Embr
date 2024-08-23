@@ -4,15 +4,15 @@ sidebar_position: 7
 
 # Classes and Objects
 
-As of v0.10.0, Omega has classes.
+As of v0.10.0, Embr has classes.
 
 ## Class Declaration
 
-In Omega, a class is declared using the `class` keyword followed by the class name and a block of code containing methods. A class serves as a blueprint for creating objects (instants).
+In Embr, a class is declared using the `class` keyword followed by the class name and a block of code containing methods. A class serves as a blueprint for creating objects (instants).
 
 ## Syntax
 
-```omega
+```embr
 class ClassName {
   // Method definitions
 }
@@ -20,7 +20,7 @@ class ClassName {
 
 ## Example:
 
-```omega
+```embr
 class Animal {
   speak() {
     out "Animal sound";
@@ -34,13 +34,13 @@ To create an object from a class, call the class name followed by parentheses. T
 
 ## Syntax:
 
-```omega
+```embr
 var objectName = ClassName();
 ```
 
 ## Example:
 
-```omega
+```embr
 var dog = Animal();
 dog.speak(); // outputs: Animal sound
 ```
@@ -51,7 +51,7 @@ Methods are functions defined within a class. They can be called on objects inst
 
 ## Syntax:
 
-```omega
+```embr
 class ClassName {
   methodName() {
     // method body
@@ -61,7 +61,7 @@ class ClassName {
 
 ## Example:
 
-```omega
+```embr
 class Dog {
   bark() {
     out "Woof!";
@@ -78,7 +78,7 @@ An initializer is a special method named `init` that gets called when an object 
 
 ## Syntax:
 
-```omega
+```embr
 class ClassName {
   init() {
     // initialization code
@@ -88,7 +88,7 @@ class ClassName {
 
 ## Example:
 
-```omega
+```embr
 class Person {
   init(name) {
     this.name = name;
@@ -105,11 +105,11 @@ alice.greet(); // outputs: Hello, Alice
 
 # Inheritance and Super
 
-Omega supports single inheritance, allowing a class to inherit methods and properties from another class using the `<` symbol. The `super` keyword is used to call methods from the superclass.
+Embr supports single inheritance, allowing a class to inherit methods and properties from another class using the `<` symbol. The `super` keyword is used to call methods from the superclass.
 
 ## Syntax:
 
-```omega
+```embr
 class SubClass < SuperClass {
   // subclass methods
 }
@@ -117,7 +117,7 @@ class SubClass < SuperClass {
 
 ## Example:
 
-```omega
+```embr
 class Vehicle {
   start() {
     out "Vehicle starting";

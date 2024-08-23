@@ -6,8 +6,8 @@ sidebar_position: 2
 
 ## Installation
 
-Currently, Omega is interpreted via a REPL built in C.
+Currently, Embr is interpreted via a REPL built in C.
 
-If you'd like to compile the interpreter from source, you're free to do so. In fact, it's encouraged as this will help to determine where Omega can and cannot run.
+If you'd like to compile the interpreter from source, you're free to do so. In fact, it's encouraged as this will help to determine where Embr can and cannot run.
 
 That being said, you can also just download a precompiled interpreter and run it.

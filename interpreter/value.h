@@ -1,5 +1,5 @@
-#ifndef omega_value_h
-#define omega_value_h
+#ifndef embr_value_h
+#define embr_value_h
 
 #include <string.h>
 

@@ -1,10 +1,10 @@
-# Omega Syntax Highlighting
+# Embr Syntax Highlighting
 
-This extension provides syntax highlighting for the Omega programming language.
+This extension provides syntax highlighting for the Embr programming language.
 
 ## Features
 
-- Syntax highlighting for Omega `.omg` files.
+- Syntax highlighting for Embr `.mbr` files.
 - Support for keywords, functions, variables, classes, and more.
 
 ## Requirements
@@ -19,9 +19,9 @@ This extension provides syntax highlighting for the Omega programming language.
 
 ### [v0.11.0]
 
-- Add support for .omg file extension.
+- Add support for .mbr file extension.
 
 ## More Information
 
-- [Omega Language Repository](https://github.com/dishpit/omega)
-- [Omega Documentation Website](https://omegalang.com/)
+- [Embr Language Repository](https://github.com/dishpit/embr)
+- [Embr Documentation Website](https://embrlang.com/)

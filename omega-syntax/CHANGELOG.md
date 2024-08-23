@@ -6,4 +6,4 @@
 
 ## [v0.1.0]
 
-- Initial release with basic syntax highlighting for Omega.
+- Initial release with basic syntax highlighting for Embr.

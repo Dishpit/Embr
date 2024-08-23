@@ -6,15 +6,15 @@ sidebar_position: 1
 
 By sticking to an established style guide, programmers don't need to formulate ad hoc style rules, nor do they need to debate with other programmers about which style rules should be used, which saves time, communication overhead, and mental energy.
 
-Humans comprehend information through pattern matching. By ensuring that all Omega code has similar formatting, less mental effort is required to comprehend a new project, lowering the barrier to entry for new developers.
+Humans comprehend information through pattern matching. By ensuring that all Embr code has similar formatting, less mental effort is required to comprehend a new project, lowering the barrier to entry for new developers.
 
 Thus, there's a very large benefit to using a community-consistent format.
 
-## The default Omega style
+## The default Embr style
 
-The Omega Style Guide defines the default Omega style. Everything in this style guide, whether or not it uses language such as "must" or the imperative mood such as "insert a space ..." or "break the line after ...", refers to the default style.
+The Embr Style Guide defines the default Embr style. Everything in this style guide, whether or not it uses language such as "must" or the imperative mood such as "insert a space ..." or "break the line after ...", refers to the default style.
 
-This should not be interpreted as forbidding developers from following a non-default style, or forbidding tools from adding any particular configuration options, though the original creator of Omega may forcefully extract your kneecaps as a sacrifice to the gods if he catches you drifting from the default style.
+This should not be interpreted as forbidding developers from following a non-default style, or forbidding tools from adding any particular configuration options, though the original creator of Embr may forcefully extract your kneecaps as a sacrifice to the gods if he catches you drifting from the default style.
 
 ## Formatting Conventions
 
@@ -28,7 +28,7 @@ This should not be interpreted as forbidding developers from following a non-def
 
 Prefer block indent over visual indent:
 
-```omega
+```embr
 function_call(
   foo,
   bar,
@@ -40,7 +40,7 @@ This makes for smaller diffs and less rightward drift.
 
 In comma-separated lists of any kind, do not use a trailing comma when followed by a newline:
 
-```omega
+```embr
 function_call(
   argument,
   another_argument
@@ -51,7 +51,7 @@ function_call(
 
 Separate items and statements by either zero or one blank lines.
 
-```omega
+```embr
 fn foo() @int {
   var x = ...;
 

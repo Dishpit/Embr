@@ -1,5 +1,5 @@
-#ifndef omega_vm_h
-#define omega_vm_h
+#ifndef embr_vm_h
+#define embr_vm_h
 
 #include "object.h"
 #include "table.h"

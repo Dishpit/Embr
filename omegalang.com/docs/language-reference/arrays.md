@@ -4,17 +4,17 @@ sidebar_position: 8
 
 # Arrays
 
-Arrays have been introduced to Omega in v0.11.0.
+Arrays have been introduced to Embr in v0.11.0.
 
 ## Introduction
 
-Arrays in Omega are versatile and powerful data structures that allow you to store multiple values in a single variable. Arrays can contain elements of any data type, including numbers, strings, booleans, other arrays, and even functions!
+Arrays in Embr are versatile and powerful data structures that allow you to store multiple values in a single variable. Arrays can contain elements of any data type, including numbers, strings, booleans, other arrays, and even functions!
 
 ## Creating Arrays
 
-To create an array in Omega, use square brackets `[]` and separate elements with commas. Arrays can hold any type of data.
+To create an array in Embr, use square brackets `[]` and separate elements with commas. Arrays can hold any type of data.
 
-```omega
+```embr
 var empty_arr = [];
 var number_arr = [1, 2, 3, 4, 5];
 var mixed_arr = [1, "two", true, 3.14, [5, 6]];
@@ -24,7 +24,7 @@ var mixed_arr = [1, "two", true, 3.14, [5, 6]];
 
 You can access elements in an array using the index operator `[]`. Array indices are zero-based, meaning the first element is at index `0`.
 
-```omega
+```embr
 var my_arr = [10, 20, 30, 40, 50];
 var first_element = my_arr[0]; // 10
 var third_element = my_arr[2]; // 30
@@ -34,7 +34,7 @@ var third_element = my_arr[2]; // 30
 
 You can modify elements in an array by assigning a new value to a specific index.
 
-```omega
+```embr
 var my_arr = [10, 20, 30, 40, 50];
 my_arr[0] = 15; // my_arr is now [15, 20, 30, 40, 50]
 ```
@@ -43,7 +43,7 @@ my_arr[0] = 15; // my_arr is now [15, 20, 30, 40, 50]
 
 ### Example 1: Basic Array Operations
 
-```omega
+```embr
 var my_array = [1, 2, 3];
 out my_array; // Outputs: [1, 2, 3]
 
@@ -67,7 +67,7 @@ out rest_array; // Outputs: [2, 3]
 
 ### Example 2: Nested Arrays
 
-```omega
+```embr
 var nested_array = [[1, 2], [3, 4], [5, 6]];
 out nested_array; // Outputs: [[1, 2], [3, 4], [5, 6]]
 
@@ -80,7 +80,7 @@ out nested_array; // Outputs: [[1, 2, 3], [3, 4], [5, 6]]
 
 ### Example 3: Using Array Functions in Expressions
 
-```omega
+```embr
 var my_array = [10, 20, 30];
 append(my_array, head([1, 2, 3]));
 out my_array; // Outputs: [10, 20, 30, 1]
@@ -94,7 +94,7 @@ out another_array; // Outputs: [20, 30, 1]
 ```
 // Define some functions
 fn say_hello() {
-  out "Hello, Omega!";
+  out "Hello, Embr!";
 }
 
 fn add(a, b) {

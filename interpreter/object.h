@@ -1,5 +1,5 @@
-#ifndef omega_object_h
-#define omega_object_h
+#ifndef embr_object_h
+#define embr_object_h
 
 #include "common.h"
 #include "table.h"

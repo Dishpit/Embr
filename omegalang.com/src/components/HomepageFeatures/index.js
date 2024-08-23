@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Omega&apos;s syntax is straightforward and easy to learn, using clear type annotations and intuitive return type markers, making programming accessible for beginners and efficient for experienced developers.
+        Embr&apos;s syntax is straightforward and easy to learn, using clear type annotations and intuitive return type markers, making programming accessible for beginners and efficient for experienced developers.
       </>
     ),
   },
@@ -17,7 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Omega is built with a future-proof design, ensuring that every specification iteration remains compatible with new releases. Unlike other languages such as Rust, Omega avoids breaking changes and forwards incompatibility, providing a stable and reliable coding experience over time.
+        Embr is built with a future-proof design, ensuring that every specification iteration remains compatible with new releases. Unlike other languages such as Rust, Embr avoids breaking changes and forwards incompatibility, providing a stable and reliable coding experience over time.
       </>
     ),
   },
@@ -26,7 +26,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Omega offers a minimalist feature set, with explicit types and familiar programming concepts, designed to flatten the learning curve and enable quick mastery for new programmers.
+        Embr offers a minimalist feature set, with explicit types and familiar programming concepts, designed to flatten the learning curve and enable quick mastery for new programmers.
       </>
     ),
   },

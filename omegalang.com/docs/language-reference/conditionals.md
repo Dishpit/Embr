@@ -4,19 +4,19 @@ sidebar_position: 5
 
 # Conditionals
 
-Conditionals are central to controlling the flow of code in Omega, allowing you to execute different blocks of code based on certain conditions.
+Conditionals are central to controlling the flow of code in Embr, allowing you to execute different blocks of code based on certain conditions.
 
-In Omega you can use `if` and `else` statements to control the flow of your program based on Boolean expressions.
+In Embr you can use `if` and `else` statements to control the flow of your program based on Boolean expressions.
 
 ## Using Conditionals
 
-In Omega, conditionals are written using the `if` keyword, followed by a condition in parentheses `()`, and the code block to execute if the condition is true enclosed in braces `{}`.
+In Embr, conditionals are written using the `if` keyword, followed by a condition in parentheses `()`, and the code block to execute if the condition is true enclosed in braces `{}`.
 
 ### Syntax
 
-The basic syntax for conditionals in Omega is as follows:
+The basic syntax for conditionals in Embr is as follows:
 
-```omega
+```embr
 if (condition) {
   // code to execute if condition is true
 } else {

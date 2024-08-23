@@ -1,6 +1,6 @@
 {
-  "scopeName": "source.omega",
-  "name": "Omega",
+  "scopeName": "source.embr",
+  "name": "Embr",
   "patterns": [
     {
       "include": "#comments"
@@ -22,7 +22,7 @@
     "comments": {
       "patterns": [
         {
-          "name": "comment.line.double-slash.omega",
+          "name": "comment.line.double-slash.embr",
           "match": "//.*$"
         }
       ]
@@ -30,7 +30,7 @@
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.omega",
+          "name": "keyword.control.embr",
           "match": "\\b(if|else|return|class|var|while|fn|for|out)\\b"
         }
       ]
@@ -38,7 +38,7 @@
     "functions": {
       "patterns": [
         {
-          "name": "entity.name.function.omega",
+          "name": "entity.name.function.embr",
           "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\s*(?=\\()"
         }
       ]
@@ -46,7 +46,7 @@
     "variables": {
       "patterns": [
         {
-          "name": "variable.omega",
+          "name": "variable.embr",
           "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
         }
       ]
@@ -54,15 +54,15 @@
     "constants": {
       "patterns": [
         {
-          "name": "constant.numeric.omega",
+          "name": "constant.numeric.embr",
           "match": "\\b\\d+\\b"
         },
         {
-          "name": "constant.language.boolean.omega",
+          "name": "constant.language.boolean.embr",
           "match": "\\b(true|false)\\b"
         },
         {
-          "name": "constant.language.null.omega",
+          "name": "constant.language.null.embr",
           "match": "\\bnil\\b"
         }
       ]

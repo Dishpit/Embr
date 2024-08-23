@@ -4,18 +4,18 @@ sidebar_position: 10
 
 # Hash Tables
 
-Hashes have been introduced to Omega as of v0.16.0.
+Hashes have been introduced to Embr as of v0.16.0.
 
 ## Introduction
 
-In Omega, a hash table (also known as a dictionary, dict, hashmap, or simply a hash) is a data structure that allows you to store key-value pairs. This data type is particularly useful for scenarios where you need to associate values with unique keys for quick lookup, insertion, and deletion.
+In Embr, a hash table (also known as a dictionary, dict, hashmap, or simply a hash) is a data structure that allows you to store key-value pairs. This data type is particularly useful for scenarios where you need to associate values with unique keys for quick lookup, insertion, and deletion.
 
 ## Syntax
 
-To create a hash table in Omega, you can use the following syntax:
+To create a hash table in Embr, you can use the following syntax:
 
 SomeOtherFile.omg:
-```omega
+```embr
 var my_hash = {"key1": "value1", "key2": "value2"};
 ```
 
@@ -23,9 +23,9 @@ Values can be of any data type, and you can add new key-value pairs to an existi
 
 ## Example Usage
 
-Here's an example of how to use hash tables in Omega.
+Here's an example of how to use hash tables in Embr.
 
-```omega
+```embr
 var my_hash = {"hash table!": "first hash key!"};
 
 my_hash.dog = "Golden Retriever";

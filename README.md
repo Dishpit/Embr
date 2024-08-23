@@ -1,28 +1,28 @@
-# The Omega Programming Language
+# The Embr Programming Language
 
-This is the main source code repository for Omega.
+This is the main source code repository for Embr.
 
 ## Compiling the Interpreter
 
 Quick and easy compilation:
-Windows: `cl *.c /Fe:omega.exe`
+Windows: `cl *.c /Fe:embr.exe`
 
 Full compilation and deployment to production:
-Windows: `cl *.c /Fe:omega_v0.14.0_win_x64.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
-Ubuntu: `gcc *.c -o omega_v0.14.0_linux_x64 -O3 -flto -s -DNDEBUG -lm`
+Windows: `cl *.c /Fe:embr_v0.18.0_win_x64_general.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE`
+Ubuntu: `gcc *.c -o embr_v0.14.0_linux_x64 -O3 -flto -s -DNDEBUG -lm`
 
-Experimental Performance Build, Intel: `cl *.c /Fe:omega_v0.17.0_win_x64_intel.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:INTEL64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
+Experimental Performance Build, Intel: `cl *.c /Fe:embr_v0.18.0_win_x64_intel.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:INTEL64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
 
-Experimental Performance Build, AMD: `cl *.c /Fe:omega_v0.17.0_win_x64_amd.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:AMD64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
+Experimental Performance Build, AMD: `cl *.c /Fe:embr_v0.18.0_win_x64_amd.exe /O2 /Os /GL /DNDEBUG /MD /GS- /Gy /fp:fast /arch:AVX2 /favor:AMD64 /Zc:inline /link /LTCG /OPT:REF /OPT:ICF /INCREMENTAL:NO /RELEASE /NXCOMPAT:NO /DYNAMICBASE:NO /FIXED`
 
-## About Omega
+## About Embr
 
-Omega is (obviously) in its extreme infancy stage; it hasn't even attached to the uterus lining yet. Be advised that everything has the potential to change as time goes on, but I'm planning to prevent any breaking changes as much as possible so I can maintain a singular backwards-compatible spec as opposed to Rust's tendency to break previous versions.
+Embr is (obviously) in its extreme infancy stage; it hasn't even attached to the uterus lining yet. Be advised that everything has the potential to change as time goes on, but I'm planning to prevent any breaking changes as much as possible so I can maintain a singular backwards-compatible spec as opposed to Rust's tendency to break previous versions.
 
-Omega is designed to be a general-purpose programming language. Sure, it'd be great if I can set it up so it can accept multiple programming paradigms (functional, OOP, etc) in order to ease adoption from developers of all flavors, but that's wildly ambitious at this stage.
+Embr is designed to be a general-purpose programming language. Sure, it'd be great if I can set it up so it can accept multiple programming paradigms (functional, OOP, etc) in order to ease adoption from developers of all flavors, but that's wildly ambitious at this stage.
 
 ## Contributing
-I'm thrilled that you're interested in contributing to Omega! Please adopt the following branch and development guidelines to ensure a smooth and collaborative contribution environment.
+I'm thrilled that you're interested in contributing to Embr! Please adopt the following branch and development guidelines to ensure a smooth and collaborative contribution environment.
 
 ### Branch Guidelines
 

@@ -1,5 +1,5 @@
-#ifndef omega_scanner_h
-#define omega_scanner_h
+#ifndef embr_scanner_h
+#define embr_scanner_h
 
 typedef enum {
   // single-character tokens

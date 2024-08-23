@@ -1,5 +1,5 @@
-#ifndef omega_debug_h
-#define omega_debug_h
+#ifndef embr_debug_h
+#define embr_debug_h
 
 #include "chunk.h"
 

@@ -1,5 +1,5 @@
-#ifndef omega_memory_h
-#define omega_memory_h
+#ifndef embr_memory_h
+#define embr_memory_h
 
 #include "common.h"
 #include "object.h"

@@ -1,5 +1,5 @@
-#ifndef omega_chunk_h
-#define omega_chunk_h
+#ifndef embr_chunk_h
+#define embr_chunk_h
 
 #include "common.h"
 #include "value.h"

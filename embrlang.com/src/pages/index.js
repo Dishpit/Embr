@@ -20,7 +20,7 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="https://github.com/Dishpit/Embr">
-            Check Out Embr! 💻
+            Check Out Embr! 🔥
           </Link>
         </div>
         <p>Current version: v0.18.0</p>

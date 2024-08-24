@@ -14,6 +14,23 @@ Returns the length of time elapsed since the interpreter has started.
 out clock();
 ```
 
+## time()
+
+Returns the current Unix timestamp.
+
+```embr
+out time();
+```
+
+## term(x)
+
+Accepts a stringified terminal command, allowing Embr to run terminal commands on your computer.
+
+```embr
+term("code ."); // launches vscode if you have 'code' in your system path
+term("echo hello embr!"); // echos 'hello embr!' in your terminal
+```
+
 ## out
 
 Outputs the evaluation of the remainder of the line into the console.

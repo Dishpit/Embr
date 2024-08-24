@@ -165,17 +165,17 @@ Value readDict(ObjDict* dict, ObjString* key) {
 
 void printDict(ObjDict* dict) {
   printf("{");
-  int count = 0;
+  bool first = true;
   for (int i = 0; i < dict->items.capacity; i++) {
     Entry* entry = &dict->items.entries[i];
     if (entry->key != NULL) {
-      count++;
+      if (!first) {
+        printf(", ");
+      }
+      first = false;
       printValue(OBJ_VAL(entry->key));
       printf(": ");
       printValue(entry->value);
-      if (count < dict->items.count) {
-        printf(", ");
-      }
     }
   }
   printf("}");

@@ -51,8 +51,14 @@ static Value lengthNative(int argCount, Value* args) {
     return NIL_VAL;
   }
 }
+
 static Value clockNative(int argCount, Value* args) {
   return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value timeNative(int argCount, Value* args) {
+  time_t currentTime = time(NULL);
+  return NUMBER_VAL((double)currentTime);
 }
 
 static Value arrayPrepend(int argCount, Value* args) {
@@ -218,6 +224,7 @@ void initVM() {
   vm.initString = copyString("init", 4);
 
   defineNative("clock", clockNative);
+  defineNative("time", timeNative);
   defineNative("prepend", arrayPrepend);
   defineNative("append", arrayAppend);
   defineNative("head", arrayHead);

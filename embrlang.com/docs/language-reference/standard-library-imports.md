@@ -18,13 +18,13 @@ When importing, Embr will attempt to search through the STL first. Because of th
 
 ## Example
 
-SomeOtherFile.omg:
+SomeOtherFile.mbr:
 ```embr
 fn hello_world() {
   out "Hello, Embr!";
 }
 ```
-main.omg:
+main.mbr:
 ```embr
 import Math;
 # SomeOtherFile;

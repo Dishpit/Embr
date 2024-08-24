@@ -374,14 +374,14 @@ void loadFile(char* name) {
 
   char nameCopy[256];
   strcpy(nameCopy, name);
-  strcat(nameCopy, ".omg");
+  strcat(nameCopy, ".mbr");
   
   char filePath[256];
   snprintf(filePath, sizeof(filePath), "./stl/%s", nameCopy);
 
   struct stat buffer;
   if (stat(filePath, &buffer) != 0) {
-    snprintf(filePath, sizeof(filePath), "%s.omg", name);
+    snprintf(filePath, sizeof(filePath), "%s.mbr", name);
   }
 
   FILE *file = fopen(filePath, "r");  // Open as a text file

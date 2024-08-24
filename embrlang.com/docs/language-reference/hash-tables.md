@@ -14,7 +14,7 @@ In Embr, a hash table (also known as a dictionary, dict, hashmap, or simply a ha
 
 To create a hash table in Embr, you can use the following syntax:
 
-SomeOtherFile.omg:
+SomeOtherFile.mbr:
 ```embr
 var my_hash = {"key1": "value1", "key2": "value2"};
 ```

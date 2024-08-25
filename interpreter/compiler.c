@@ -1050,6 +1050,23 @@ static void whileStatement() {
   emitByte(OP_POP);
 }
 
+static void untilStatement() {
+  int loopStart = currentChunk()->count;
+  consume(TOKEN_LEFT_PAREN, "Expect '(' after 'until'.");
+  expression();
+  consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
+
+  emitByte(OP_NOT);
+
+  int exitJump = emitJump(OP_JUMP_IF_FALSE);
+  emitByte(OP_POP);
+  statement();
+  emitLoop(loopStart);
+
+  patchJump(exitJump);
+  emitByte(OP_POP);
+}
+
 static void synchronize() {
   parser.panicMode = false;
 
@@ -1101,6 +1118,8 @@ static void statement() {
     returnStatement();
   } else if (match(TOKEN_WHILE)) {
     whileStatement();
+  } else if (match(TOKEN_UNTIL)) {
+    untilStatement();
   } else if (match(TOKEN_LEFT_BRACE)) {
     beginScope();
     block();

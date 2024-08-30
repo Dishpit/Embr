@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -51,8 +52,26 @@ static Value lengthNative(int argCount, Value* args) {
     return NIL_VAL;
   }
 }
+
 static Value clockNative(int argCount, Value* args) {
   return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value timeNative(int argCount, Value* args) {
+  time_t currentTime = time(NULL);
+  return NUMBER_VAL((double)currentTime);
+}
+
+static Value termNative(int argCount, Value* args) {
+  if (argCount != 1 || !IS_STRING(args[0])) {
+    runtimeError("SKILL ISSUE: term() takes exactly 1 string argument.");
+    return NIL_VAL;
+  }
+
+  ObjString* command = AS_STRING(args[0]);
+  int result = system(command->chars);
+
+  return NUMBER_VAL((double)result);
 }
 
 static Value arrayPrepend(int argCount, Value* args) {
@@ -218,6 +237,8 @@ void initVM() {
   vm.initString = copyString("init", 4);
 
   defineNative("clock", clockNative);
+  defineNative("time", timeNative);
+  defineNative("term", termNative);
   defineNative("prepend", arrayPrepend);
   defineNative("append", arrayAppend);
   defineNative("head", arrayHead);
@@ -326,8 +347,7 @@ static bool callValue(Value callee, int argCount) {
   return false;
 }
 
-static bool invokeFromClass(ObjClass* klass, ObjString* name,
-                            int argCount) {
+static bool invokeFromClass(ObjClass* klass, ObjString* name, int argCount) {
   Value method;
   if (!tableGet(&klass->methods, name, &method)) {
     runtimeError("SKILL ISSUE: Undefined property '%s'.", name->chars);
